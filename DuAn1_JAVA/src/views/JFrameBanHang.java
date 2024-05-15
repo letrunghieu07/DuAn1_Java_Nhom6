@@ -4,18 +4,40 @@
  */
 package views;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import model.chiTietSanPham;
+import repository.BanHangRepository;
+
 /**
  *
  * @author trung
  */
 public class JFrameBanHang extends javax.swing.JFrame {
 
+    
+    BanHangRepository bhService = new BanHangRepository();
     /**
      * Creates new form JFrameBanHang
      */
     public JFrameBanHang() {
         initComponents();
         setLocationRelativeTo(null);
+        fillTableDanhSachSP();
+    }
+    
+    void fillTableDanhSachSP() {
+        List<chiTietSanPham> listCTSP = bhService.listAll();
+
+        DefaultTableModel model = (DefaultTableModel) tblDanhSachSP.getModel();
+        model.setRowCount(0);
+        for (chiTietSanPham CTSP : listCTSP) {
+            Object[] data = {
+                CTSP.getMaCTSP(), CTSP.getTenSP(), CTSP.getTenSize(), CTSP.getTenMS(), CTSP.getTenCL(),
+                CTSP.getTenCLDe(), CTSP.getSoLuong(), CTSP.getDonGia()
+            };
+            model.addRow(data);
+        }
     }
 
     /**
