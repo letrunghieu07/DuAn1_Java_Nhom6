@@ -33,13 +33,13 @@ public class BanHangRepository {
                                                              CHI_TIET_SAN_PHAM.DonGia,CHI_TIET_SAN_PHAM.SoLuong, Giam_Gia.MucGiam,CHI_TIET_SAN_PHAM.mota 
                                                              from CHI_TIET_SAN_PHAM 
                                                              
-                                        					 join SAN_PHAM on SAN_PHAM.MaSP =  CHI_TIET_SAN_PHAM.MaSP 
-                                        					 join CHAT_LIEU_DE_GIAY on CHAT_LIEU_DE_GIAY.MaCLDe  =  CHI_TIET_SAN_PHAM.MaCLDe
+                                                             join SAN_PHAM on SAN_PHAM.MaSP =  CHI_TIET_SAN_PHAM.MaSP 
+                                                             join CHAT_LIEU_DE_GIAY on CHAT_LIEU_DE_GIAY.MaCLDe  =  CHI_TIET_SAN_PHAM.MaCLDe
                                                              join SIZE on SIZE.MaSize =  CHI_TIET_SAN_PHAM.MaSize
                                                              join MAU_SAC on MAU_SAC.MaMS =  CHI_TIET_SAN_PHAM.MaMS
-                                                           Left join Giam_Gia on Giam_Gia.MaGG= CHI_TIET_SAN_PHAM.MaGG
+                                                             Left join Giam_Gia on Giam_Gia.MaGG= CHI_TIET_SAN_PHAM.MaGG
                                                              join CHAT_LIEU on CHAT_LIEU.MaCL =  CHI_TIET_SAN_PHAM.MaCL
-                                                              where SAN_PHAM.TrangThai=1
+                                                             where SAN_PHAM.TrangThai=1
                    """;
         Connection conn = null;
         try {
@@ -67,12 +67,27 @@ public class BanHangRepository {
         return listAll;
         
     }
+    
+    //load HTTT
+    public ArrayList getHTTT() {
+        String query = "select * from Thanh_Toan";
+        ArrayList listTT = new ArrayList<>();
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("MaTT");
+                String hinThuc = rs.getString("HinhThucThanhToan");
+                // hinhThucThanhToan httt = new hinhThucThanhToan(id, hinThuc);
+                listTT.add(hinThuc);
+            }
+            return listTT;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
         
-    
-    
-    
-    
-    
-       
-
 }
