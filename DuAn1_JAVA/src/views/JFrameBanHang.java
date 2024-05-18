@@ -10,6 +10,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import model.chiTietSanPham;
+import model.hoaDon;
 import repository.BanHangRepository;
 
 /**
@@ -28,6 +29,8 @@ public class JFrameBanHang extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         fillTableDanhSachSP();
         fillHTTT();
+        fillDSHDCho();
+        
     }
     
     // Fill danh sách sản phẩm
@@ -57,7 +60,33 @@ public class JFrameBanHang extends javax.swing.JFrame {
         cboHinhThucThanhToan.setModel(new javax.swing.DefaultComboBoxModel(httt));
     }
     
-    
+    // Fill hóa đơn chờ
+    void fillDSHDCho(){
+        int trangThai = 0;
+        if(rdoChuaThanhToan.isSelected()){
+            trangThai = 0;
+            btnTaoHD.setEnabled(true);
+        }
+        if(rdoDaThanhToan.isSelected()){
+            trangThai = 1;
+            btnTaoHD.setEnabled(true);
+        }
+        
+        ArrayList<hoaDon> listHD = banHangRepository.getHoaDonCho(trangThai);
+        
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
+        
+        for(hoaDon hd: listHD){
+            Object[] data = {
+                hd.getMaHD(),
+                hd.getTenNV(),
+                hd.getNgayTao(),
+                hd.getTrangThai() ? "Đã thanh toán" : "Chưa thanh toán"
+            };
+            model.addRow(data);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,6 +97,8 @@ public class JFrameBanHang extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jpnNavigation = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         btnHome = new javax.swing.JButton();
@@ -210,7 +241,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(354, 354, 354)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(585, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,6 +287,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Hóa đơn");
 
+        buttonGroup1.add(rdoChuaThanhToan);
         rdoChuaThanhToan.setText("Chưa thanh toán");
         rdoChuaThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -263,6 +295,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(rdoDaThanhToan);
         rdoDaThanhToan.setText("Đã Thanh toán");
         rdoDaThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -812,6 +845,8 @@ public class JFrameBanHang extends javax.swing.JFrame {
     private javax.swing.JButton btnTaoHD;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnXoa;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<String> cboHinhThucThanhToan;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

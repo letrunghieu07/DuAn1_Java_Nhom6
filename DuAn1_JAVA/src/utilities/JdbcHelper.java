@@ -15,7 +15,7 @@ public class JdbcHelper {
         dataSource.setPassword("123456");
         dataSource.setPortNumber(1433);
         dataSource.setEncrypt(Boolean.FALSE);
-        dataSource.setDatabaseName("DuAn1_BanGiay_Nhom6");
+        dataSource.setDatabaseName("dbmoi");
         return dataSource.getConnection();
     }
      public static void main(String[] args) throws SQLServerException {

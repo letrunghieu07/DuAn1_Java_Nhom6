@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.chiTietSanPham;
+import model.hoaDon;
 import utilities.JdbcHelper;
 
 /**
@@ -21,10 +22,10 @@ import utilities.JdbcHelper;
  * @author trung
  */
 public class BanHangRepository {
-    
+
     JdbcHelper jdbcHelper = new JdbcHelper();
-    
-     //lấy all chi tiet sản phẩm
+
+    //lấy all chi tiet sản phẩm
     public List<chiTietSanPham> listAll() {
         List<chiTietSanPham> listAll = new ArrayList<>();
         String query = """
@@ -46,7 +47,7 @@ public class BanHangRepository {
             conn = JdbcHelper.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 chiTietSanPham CTSP = new chiTietSanPham();
                 CTSP.setMaCTSP(rs.getInt("MaCTSP"));
                 CTSP.setTenSP(rs.getString("TenSP"));
@@ -62,12 +63,11 @@ public class BanHangRepository {
             }
         } catch (Exception e) {
         }
-        
-        
+
         return listAll;
-        
+
     }
-    
+
     //load HTTT
     public ArrayList getHTTT() {
         String query = "select * from Thanh_Toan";
@@ -88,6 +88,71 @@ public class BanHangRepository {
             return null;
         }
     }
+
+    // Load hóa đơn 
+    public ArrayList<hoaDon> getAllHD() {
+        String query = """
+               select HOA_DON.MaHD, NHAN_VIEN.HoTen, HOA_DON.NgayTao, HOA_DON.TrangThai 
+               from HOA_DON 
+               join THONG_TIN_KH on HOA_DON.MaTTKH= THONG_TIN_KH.MaTTKH
+               join NHAN_VIEN on HOA_DON.MaNV= NHAN_VIEN.MaNV
+               where HOA_DON.TrangThai = ?""";
+
+        ArrayList<hoaDon> listAll = new ArrayList<>();
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                hoaDon hd = new hoaDon();
+                hd.setMaHD(rs.getInt("MaHD"));
+                hd.setTenNV(rs.getString("HoTen"));
+                hd.setNgayTao(rs.getString("ngayTao"));
+                hd.setTrangThai(rs.getBoolean("trangThai"));
+                listAll.add(hd);
+            }
+            return listAll;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //load hoa don chờ
+    public ArrayList<hoaDon> getHoaDonCho(int trangThai) {
+        ArrayList<hoaDon> listHDCho = new ArrayList<>();
+        String query = """
+               select HOA_DON.MaHD, NHAN_VIEN.HoTen, HOA_DON.NgayTao, HOA_DON.TrangThai 
+               from HOA_DON 
+               join NHAN_VIEN on HOA_DON.MaNV= NHAN_VIEN.MaNV
+               where HOA_DON.TrangThai like ?
+               order by MaHD desc """;
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, "%" + trangThai + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                hoaDon hd = new hoaDon();
+                hd.setMaHD(rs.getInt("MaHD"));
+                hd.setTenNV(rs.getString("HoTen"));
+                hd.setNgayTao(rs.getString("ngayTao"));
+                hd.setTrangThai(rs.getBoolean("trangThai"));
+                listHDCho.add(hd);
+            }
+            System.out.println("getdata");
+            return listHDCho;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
     
-        
+    
 }
