@@ -153,6 +153,25 @@ public class BanHangRepository {
         }
 
     }
-    
-    
+
+    public boolean insertHoaDonCho(int maNV, String ngayTao, int trangThai) {
+        String query = """
+                   INSERT INTO HOA_DON
+                          (MaNV, NgayTao, TrangThai)
+                   VALUES
+                          (?, ?, ?)""";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, maNV);
+            stmt.setString(2, ngayTao);
+            stmt.setInt(3, trangThai);
+            stmt.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
