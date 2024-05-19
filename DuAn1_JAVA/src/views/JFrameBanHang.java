@@ -116,6 +116,22 @@ public class JFrameBanHang extends javax.swing.JFrame {
             return;
         }
    }
+    
+    void huyHoaDonCho(){
+        int row = tblHoaDon.getSelectedRow();
+        if(row < 0){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn");
+            return;
+        }
+        
+        int check = JOptionPane.showConfirmDialog(this, "Bạn có muốn hủy hóa đơn ko", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (check == 0) {
+            int maHD = (int) tblHoaDon.getValueAt(row, 0);
+            
+            banHangRepository.huyHoaDonCho(maHD);
+            fillDSHDCho();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -811,7 +827,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTaoHDActionPerformed
 
     private void btnHuyHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyHDActionPerformed
-
+        huyHoaDonCho();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHuyHDActionPerformed
 

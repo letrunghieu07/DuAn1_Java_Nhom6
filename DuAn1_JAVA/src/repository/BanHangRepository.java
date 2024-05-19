@@ -173,5 +173,19 @@ public class BanHangRepository {
             return false;
         }
     }
+    
+    public boolean huyHoaDonCho(int maDH) {
+        String query = "delete from hoa_don where maHD =?";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, maDH);
+            stmt.execute();
+            return true;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return false;
+        }
+    }
 
 }
