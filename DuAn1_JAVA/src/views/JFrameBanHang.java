@@ -4,6 +4,7 @@
  */
 package views;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.chiTietSanPham;
 import model.hoaDon;
+import model.hoaDonChiTiet;
 import repository.Auth;
 import repository.BanHangRepository;
 
@@ -117,6 +119,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
         }
    }
     
+    // HỦy hóa đơn chờ
     void huyHoaDonCho(){
         int row = tblHoaDon.getSelectedRow();
         if(row < 0){
@@ -131,6 +134,88 @@ public class JFrameBanHang extends javax.swing.JFrame {
             banHangRepository.huyHoaDonCho(maHD);
             fillDSHDCho();
         }
+    }
+    
+    void fillGioHang(int maHD){
+        ArrayList<hoaDonChiTiet> listHDCT = (ArrayList<hoaDonChiTiet>) banHangRepository.getHDCT(maHD);
+        DefaultTableModel model = (DefaultTableModel) tblGioHang.getModel();
+        model.setRowCount(0);
+        
+        for(hoaDonChiTiet hdct : listHDCT){
+            Object[] data = {
+                hdct.getMaCTSP(),
+                hdct.getTenSP(),
+                hdct.getSoLuong(),
+                hdct.getDonGia(),
+                hdct.getMucGiam(),
+                hdct.getSoLuong() * hdct.getDonGia()
+            };
+            model.addRow(data);
+        }
+    }
+    
+    void addGioHang(){
+        int rowSelectedSP = tblDanhSachSP.getSelectedRow();
+        int rowSelectedHD = tblHoaDon.getSelectedRow();
+        
+        int maHD;
+        int maCTSP;
+        int soLuongSP;
+        int soLuongThem;
+        int soLuongCuoi;
+        float donGia;
+        
+        if(rowSelectedHD < 0){
+            JOptionPane.showMessageDialog(this, "Bạn chưa chọn hóa đơn");
+            return;
+        }
+        
+        maHD = (int) tblHoaDon.getValueAt(rowSelectedHD, 0);
+        maCTSP = (int) tblDanhSachSP.getValueAt(rowSelectedSP, 0);
+        
+        soLuongSP = (int) tblDanhSachSP.getValueAt(rowSelectedSP, 6);
+        donGia = (float) tblDanhSachSP.getValueAt(rowSelectedSP, 7);
+        String check = JOptionPane.showInputDialog(this,"Nhập số lượng");
+        if(check == null){
+            return;
+        }
+        try {
+            soLuongThem = Integer.parseInt(check);
+            if(soLuongThem <= 0){
+                JOptionPane.showMessageDialog(this, "Số lượng ko hợp lệ");
+                return;
+            }
+            if(soLuongThem > soLuongSP){
+                 JOptionPane.showMessageDialog(this, "Sản phẩm ko đủ số lượng");
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showConfirmDialog(this, "Thêm sản phẩm thất bại");
+            return;
+        }
+        ArrayList<hoaDonChiTiet> listHDCT = banHangRepository.getHDCT(maHD);
+        soLuongCuoi = soLuongSP - soLuongThem;
+        
+        for(hoaDonChiTiet hdct : listHDCT){
+            if(hdct.getMaCTSP() == maCTSP){
+                int soLuongTiep = hdct.getSoLuong() + soLuongThem;
+                float thanhtien = soLuongTiep * donGia;
+                banHangRepository.updateHDCT(maHD, maCTSP, thanhtien, soLuongTiep);
+                fillGioHang(maHD);
+                banHangRepository.updateCTSP(maCTSP, soLuongSP);
+                fillTableDanhSachSP();
+                int tongTien = tinhTongTien();
+                String partten = "###,###,###";
+                DecimalFormat format = new DecimalFormat(partten);
+                String tienTe = format.format(tongTien);
+                lblTongTien.setText(tienTe);
+                return;
+            }
+            
+        }
+        
+        // Tính tổng tiền
     }
 
     /**

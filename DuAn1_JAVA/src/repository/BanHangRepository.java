@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.chiTietSanPham;
 import model.hoaDon;
+import model.hoaDonChiTiet;
 import utilities.JdbcHelper;
 
 /**
@@ -187,5 +188,80 @@ public class BanHangRepository {
             return false;
         }
     }
+    
+    // Hiển thị hóa đơn chi tiết
+    public ArrayList<hoaDonChiTiet> getHDCT(int maHD) {
+        String query = """
+                      SELECT MaHDCT, MaHD, CHI_TIET_SAN_PHAM.MaCTSP,
+                                            SAN_PHAM.TenSP,HOA_DON_CHI_TIET.SoLuong,
+                                            HOA_DON_CHI_TIET.DonGia,Giam_Gia.MucGiam
+                      
+                      FROM HOA_DON_CHI_TIET join CHI_TIET_SAN_PHAM on HOA_DON_CHI_TIET.MaCTSP = CHI_TIET_SAN_PHAM.MaCTSP
+                                        join SAN_PHAM on SAN_PHAM.MaSP = CHI_TIET_SAN_PHAM.MaSP
+                                        join Giam_Gia on Giam_Gia.maGG= CHI_TIET_SAN_PHAM.maGG
+                                        where MaHD =?""";
+        ArrayList<hoaDonChiTiet> listHDCT = new ArrayList<>();
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, maHD);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                hoaDonChiTiet hdct = new hoaDonChiTiet();
+
+                hdct.setMaHDCT(rs.getInt("MaHDCT"));
+                hdct.setMaHD(rs.getInt("MaHD"));
+                hdct.setMaCTSP(rs.getInt("MaCTSP"));
+                hdct.setTenSP(rs.getString("TenSP"));
+                hdct.setSoLuong(rs.getInt("SoLuong"));
+                hdct.setDonGia(rs.getFloat("DonGia"));
+                hdct.setMucGiam(rs.getInt("MucGiam"));
+                listHDCT.add(hdct);
+            }
+            return listHDCT;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    // update hóa đơn chi tiết
+    public boolean updateHDCT(int maHD, int maCTSP, float donGia, int soLuong) {
+        String query = """
+                      update HOA_DON_CHI_TIET
+                                             set SoLuong = ?, DonGia = ? where MaHD = ? and MaCTSP = ?""";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, soLuong);
+            stmt.setFloat(2, donGia);
+            stmt.setInt(3, maHD);
+            stmt.setInt(4, maCTSP);
+            stmt.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // update chi tiết sản phẩm
+    public boolean updateCTSP(int maCTSP, int soLuong) {
+        String query = "update CHI_TIET_SAN_PHAM\n"
+                + "                       set SoLuong = ? WHERE MaCTSP = ?";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, soLuong);
+            pstmt.setInt(2, maCTSP);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
 
 }
