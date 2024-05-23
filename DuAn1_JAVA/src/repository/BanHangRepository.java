@@ -262,6 +262,64 @@ public class BanHangRepository {
             return false;
         }
     }
+    
+    // insert hóa đơn chi tiêt
+    public boolean insertHDCT(int maCTSP, int maHD, int soLuong, float donGia) {
+        String query = "insert into HOA_DON_CHI_TIET(MaCTSP, MaHD, SoLuong, DonGia)\n"
+                + "                       values(?,?,?,?)";
+        System.out.println("aaaaa");
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, maCTSP);
+            pstmt.setInt(2, maHD);
+            pstmt.setInt(3, soLuong);
+            pstmt.setFloat(4, donGia);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+    
+    // delete HDCT
+     public boolean deleteHDCT(int maHDCT) {
+        String query = "delete Hoa_Don_Chi_Tiet where maHDCT =?";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, maHDCT);
+            stmt.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+     
+     
+     // load Số lượng CTSP
+     public int getSoLuongCTSP(int maCTSP) {
+        int soLuong = 0;
+        String query = "select soluong from chi_tiet_san_pham where maCTSP =?";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, maCTSP);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                soLuong = rs.getInt("soluong");
+            }
+            return soLuong;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
 
 }
