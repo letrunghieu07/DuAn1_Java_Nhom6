@@ -136,6 +136,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
         }
     }
 
+    // Fill danh sách sản phẩm giỏ hàng
     void fillGioHang(int maHD) {
         ArrayList<hoaDonChiTiet> listHDCT = (ArrayList<hoaDonChiTiet>) banHangRepository.getHDCT(maHD);
         DefaultTableModel model = (DefaultTableModel) tblGioHang.getModel();
@@ -150,6 +151,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
         }
     }
 
+    // add sản phẩm giỏ hàng
     void addGioHang() {
         int rowSelectedSP = tblDanhSachSP.getSelectedRow();
         int rowSelectedHD = tblHoaDon.getSelectedRow();
@@ -235,12 +237,14 @@ public class JFrameBanHang extends javax.swing.JFrame {
         return tongTien;
     }
 
+    // get row hóa đơn
     void getDataRowHoaDon(int rowSelected) {
         txtMaHD.setText(tblHoaDon.getValueAt(rowSelected, 0) + "");
         txtNgayTao.setText((String) tblHoaDon.getValueAt(rowSelected, 2));
         txtTenNV.setText((String) tblHoaDon.getValueAt(rowSelected, 1));
     }
 
+    // delete sản phẩm giỏ hàng
     void deleteSPGH() {
         int rowSelected = tblHoaDon.getSelectedRow();
         int maHD = (int) tblHoaDon.getValueAt(rowSelected, 0);
@@ -264,6 +268,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
         }
     }
 
+    // delete all giỏ hàng
     void deleteAllGH() {
         ArrayList<hoaDonChiTiet> listMaCTSP = new ArrayList<>();
         int rowSelectedHD = tblHoaDon.getSelectedRow();

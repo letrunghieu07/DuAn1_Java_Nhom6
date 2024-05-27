@@ -155,6 +155,7 @@ public class BanHangRepository {
 
     }
 
+    // insert hóa đơn chờ
     public boolean insertHoaDonCho(int maNV, String ngayTao, int trangThai) {
         String query = """
                    INSERT INTO HOA_DON
@@ -175,6 +176,7 @@ public class BanHangRepository {
         }
     }
     
+    // delete hóa đơn chờ
     public boolean huyHoaDonCho(int maDH) {
         String query = "delete from hoa_don where maHD =?";
         try {
