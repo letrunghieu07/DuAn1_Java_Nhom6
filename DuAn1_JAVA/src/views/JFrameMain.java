@@ -22,7 +22,24 @@ public class JFrameMain extends javax.swing.JFrame {
     public JFrameMain() {
         initComponents();
         setLocationRelativeTo(null);
+        int admin = Auth.isManager();
+        if (admin != 0) {
+            btnTaiKhoan.setVisible(false);
+            btnVoucher.setVisible(false);
+            btnThongKe.setVisible(false);
+            btnKhachHang.setVisible(false);
+            btnSanPham.setVisible(false);
+        }
+        ngDN();
 
+    }
+
+    void ngDN() {
+        String ten = Auth.User.getHoTen();
+        int chucvu = Auth.User.getChucVu();
+//        ?"Admin":"Nhân viên"
+        lblNguoiDangNhap.setText(ten);
+        lblChucVu.setText(chucvu == 0 ? "Admin" : "Nhân viên");
     }
 
     /**
