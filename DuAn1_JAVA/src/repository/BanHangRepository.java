@@ -31,17 +31,17 @@ public class BanHangRepository {
         List<chiTietSanPham> listAll = new ArrayList<>();
         String query = """
                    select CHI_TIET_SAN_PHAM.MaCTSP, SAN_PHAM.TenSP, CHAT_LIEU_DE_GIAY.TenChatLieuDe, 
-                                                             SIZE.KichThuoc, MAU_SAC.TenMau, CHAT_LIEU.TenChatLieu,  
-                                                             CHI_TIET_SAN_PHAM.DonGia,CHI_TIET_SAN_PHAM.SoLuong, Giam_Gia.MucGiam,CHI_TIET_SAN_PHAM.mota 
-                                                             from CHI_TIET_SAN_PHAM 
+                        SIZE.KichThuoc, MAU_SAC.TenMau, CHAT_LIEU.TenChatLieu,  
+                        CHI_TIET_SAN_PHAM.DonGia,CHI_TIET_SAN_PHAM.SoLuong, Giam_Gia.MucGiam,CHI_TIET_SAN_PHAM.mota 
+                        from CHI_TIET_SAN_PHAM 
                                                              
-                                                             join SAN_PHAM on SAN_PHAM.MaSP =  CHI_TIET_SAN_PHAM.MaSP 
-                                                             join CHAT_LIEU_DE_GIAY on CHAT_LIEU_DE_GIAY.MaCLDe  =  CHI_TIET_SAN_PHAM.MaCLDe
-                                                             join SIZE on SIZE.MaSize =  CHI_TIET_SAN_PHAM.MaSize
-                                                             join MAU_SAC on MAU_SAC.MaMS =  CHI_TIET_SAN_PHAM.MaMS
-                                                             Left join Giam_Gia on Giam_Gia.MaGG= CHI_TIET_SAN_PHAM.MaGG
-                                                             join CHAT_LIEU on CHAT_LIEU.MaCL =  CHI_TIET_SAN_PHAM.MaCL
-                                                             where SAN_PHAM.TrangThai=1
+                        join SAN_PHAM on SAN_PHAM.MaSP =  CHI_TIET_SAN_PHAM.MaSP 
+                        join CHAT_LIEU_DE_GIAY on CHAT_LIEU_DE_GIAY.MaCLDe  =  CHI_TIET_SAN_PHAM.MaCLDe
+                        join SIZE on SIZE.MaSize =  CHI_TIET_SAN_PHAM.MaSize
+                        join MAU_SAC on MAU_SAC.MaMS =  CHI_TIET_SAN_PHAM.MaMS
+                        Left join Giam_Gia on Giam_Gia.MaGG= CHI_TIET_SAN_PHAM.MaGG
+                        join CHAT_LIEU on CHAT_LIEU.MaCL =  CHI_TIET_SAN_PHAM.MaCL
+                        where SAN_PHAM.TrangThai=1
                    """;
         Connection conn = null;
         try {
@@ -175,7 +175,7 @@ public class BanHangRepository {
             return false;
         }
     }
-    
+
     // delete hóa đơn chờ
     public boolean huyHoaDonCho(int maDH) {
         String query = "delete from hoa_don where maHD =?";
@@ -190,7 +190,7 @@ public class BanHangRepository {
             return false;
         }
     }
-    
+
     // Hiển thị hóa đơn chi tiết
     public ArrayList<hoaDonChiTiet> getHDCT(int maHD) {
         String query = """
@@ -226,7 +226,7 @@ public class BanHangRepository {
             return null;
         }
     }
-    
+
     // update hóa đơn chi tiết
     public boolean updateHDCT(int maHD, int maCTSP, float donGia, int soLuong) {
         String query = """
@@ -247,7 +247,7 @@ public class BanHangRepository {
             return false;
         }
     }
-    
+
     // update chi tiết sản phẩm
     public boolean updateCTSP(int maCTSP, int soLuong) {
         String query = "update CHI_TIET_SAN_PHAM\n"
@@ -264,7 +264,7 @@ public class BanHangRepository {
             return false;
         }
     }
-    
+
     // insert hóa đơn chi tiêt
     public boolean insertHDCT(int maCTSP, int maHD, int soLuong, float donGia) {
         String query = "insert into HOA_DON_CHI_TIET(MaCTSP, MaHD, SoLuong, DonGia)\n"
@@ -285,9 +285,9 @@ public class BanHangRepository {
         }
 
     }
-    
+
     // delete HDCT
-     public boolean deleteHDCT(int maHDCT) {
+    public boolean deleteHDCT(int maHDCT) {
         String query = "delete Hoa_Don_Chi_Tiet where maHDCT =?";
 
         try {
@@ -301,10 +301,9 @@ public class BanHangRepository {
             return false;
         }
     }
-     
-     
-     // load Số lượng CTSP
-     public int getSoLuongCTSP(int maCTSP) {
+
+    // load Số lượng CTSP
+    public int getSoLuongCTSP(int maCTSP) {
         int soLuong = 0;
         String query = "select soluong from chi_tiet_san_pham where maCTSP =?";
 
@@ -322,6 +321,5 @@ public class BanHangRepository {
             return 0;
         }
     }
-
 
 }

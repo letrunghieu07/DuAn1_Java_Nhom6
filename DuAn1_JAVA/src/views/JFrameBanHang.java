@@ -145,7 +145,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
         for (hoaDonChiTiet hdct : listHDCT) {
             Object[] data = {
                 hdct.getMaCTSP(), hdct.getTenSP(), hdct.getSoLuong(), hdct.getDonGia(), hdct.getMucGiam(),
-                hdct.getSoLuong() * (hdct.getDonGia() - hdct.getMucGiam())
+                hdct.getSoLuong() * hdct.getDonGia()
             };
             model.addRow(data);
         }
