@@ -334,7 +334,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void btnKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhachHangActionPerformed
         setVisible(false);
-        new JFrameKhachHang().setVisible(true);
+        new JFrameKhacHang().setVisible(true);
     }//GEN-LAST:event_btnKhachHangActionPerformed
 
     private void btnVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoucherActionPerformed
