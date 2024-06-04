@@ -18,6 +18,7 @@ public class GiamGia1 {
     public GiamGia1() {
     }
 
+    
     public GiamGia1(int MaGG, String TenMaGiam, float MucGiam, Date NgayBatDau, Date NgayKetThuc, String GhiChu) {
         this.MaGG = MaGG;
         this.TenMaGiam = TenMaGiam;
@@ -92,5 +93,7 @@ public class GiamGia1 {
     public String toString() {
         return TenMaGiam;
     }
-
+    public Object[] dataGiamGia(){
+        return new Object[]{this.MaGG,this.TenMaGiam,this.MucGiam,this.NgayBatDau,this.NgayKetThuc,this.GhiChu};
+    }
 }

@@ -27,6 +27,11 @@ public class SanPham1 {
         this.MaDM = MaDM;
     }
 
+    public SanPham1(DanhMuc1 MaDM) {
+        this.MaDM = MaDM;
+    }
+
+    
     public int getMaSP() {
         return MaSP;
     }
@@ -93,5 +98,7 @@ public class SanPham1 {
         return TenSP;
     }
     
-
+    public Object[] dataSanPham(){
+        return new Object[]{this.MaSP,this.TenSP,this.NgayNhap,this.NgayCapNhat,this.TrangThai,this.MaDM.getTenDanhMuc()};
+    }
 }

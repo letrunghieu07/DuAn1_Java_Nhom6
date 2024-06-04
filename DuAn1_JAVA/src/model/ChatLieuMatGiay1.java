@@ -56,5 +56,8 @@ public class ChatLieuMatGiay1 {
     public String toString() {
         return TenChatLieu;
     }
-
+    
+    public Object[] dataClmg1(){
+        return new Object[]{this.MaCL,this.TenChatLieu,this.TrangThai};
+    }
 }

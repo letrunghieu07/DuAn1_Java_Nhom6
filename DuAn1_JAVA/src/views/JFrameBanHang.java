@@ -305,6 +305,56 @@ public class JFrameBanHang extends javax.swing.JFrame {
         lblTongTien.setText(stringTienTe);
     }
 
+    // update gio hang
+    void updateGioHang() {
+        int rowSelectedHD = tblHoaDon.getSelectedRow();
+        int rowSelectedGH = tblGioHang.getSelectedRow();
+        int soLuongSua;
+
+        if (rowSelectedGH < 0) {
+            JOptionPane.showMessageDialog(this, "Chua chon san pham trong gio hang!");
+            return;
+        }
+
+        int maHD = (int) tblHoaDon.getValueAt(rowSelectedHD, 0);
+        int maCTSP = (int) tblGioHang.getValueAt(rowSelectedGH, 0);
+        String check = JOptionPane.showInputDialog(this, "Nhập số lượng muốn sửa");
+        if (check == null) {
+            return;
+        }
+
+        int soLuongGH = (int) tblGioHang.getValueAt(rowSelectedGH, 2);
+        try {
+            soLuongSua = Integer.parseInt(check);
+            int soLuongCapNhat = soLuongGH - soLuongSua;
+            float donGia = (float) tblGioHang.getValueAt(rowSelectedGH, 3);
+            if (soLuongSua <= 0) {
+                JOptionPane.showMessageDialog(this, "So luong khong hop le");
+                return;
+            }
+
+            int soLuongSPCT = banHangRepository.getSoLuongCTSP(maCTSP);
+            int tongSoLuongSP = soLuongSPCT + soLuongGH;
+            int soLuongCapNhatSP;
+
+            if (soLuongSua > tongSoLuongSP) {
+                JOptionPane.showMessageDialog(this, "So luong vuot qua so luong hien tai");
+                return;
+            }
+
+            soLuongCapNhatSP = tongSoLuongSP - soLuongSua;
+            banHangRepository.updateHDCT(maHD, maCTSP, donGia, soLuongSua);
+            banHangRepository.updateCTSP(maCTSP, soLuongCapNhatSP);
+            fillTableDanhSachSP();
+            fillGioHang(maHD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Chi nhap so");
+            return;
+        }
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1012,7 +1062,12 @@ public class JFrameBanHang extends javax.swing.JFrame {
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-
+        int rowSelected = tblHoaDon.getSelectedRow();
+        if (rowSelected < 0) {
+            JOptionPane.showMessageDialog(this, "Chua chon hoa don");
+            return;
+        }
+        updateGioHang();
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void txtSDTKhachKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSDTKhachKeyReleased

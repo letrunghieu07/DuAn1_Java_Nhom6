@@ -58,4 +58,7 @@ public class MauSac1 {
         return TenMau;
     }
 
+    public Object[] dataMauSac(){
+        return new Object[]{this.MaMS,this.TenMau,this.TrangThai};
+    }
 }

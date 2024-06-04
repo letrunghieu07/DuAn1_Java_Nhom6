@@ -20,6 +20,7 @@ public class ChiTietSanPham1 {
     public ChiTietSanPham1() {
     }
 
+    
     public ChiTietSanPham1(int MaCTSP, int SoLuong, float DonGia, SanPham1 MaSP, ChatLieuDeGiay1 MaCLDe, Size1 MaSize, MauSac1 MaMS, ChatLieuMatGiay1 MaCL, String MoTa, GiamGia1 MaGG) {
         this.MaCTSP = MaCTSP;
         this.SoLuong = SoLuong;
@@ -113,16 +114,8 @@ public class ChiTietSanPham1 {
         this.MaGG = MaGG;
     }
 
-    public ChiTietSanPham1(int MaCTSP, int SoLuong, float DonGia, SanPham1 MaSP, ChatLieuDeGiay1 MaCLDe, Size1 MaSize, MauSac1 MaMS, ChatLieuMatGiay1 MaCL, String MoTa) {
-        this.MaCTSP = MaCTSP;
-        this.SoLuong = SoLuong;
-        this.DonGia = DonGia;
-        this.MaSP = MaSP;
-        this.MaCLDe = MaCLDe;
-        this.MaSize = MaSize;
-        this.MaMS = MaMS;
-        this.MaCL = MaCL;
-        this.MoTa = MoTa;
-    }
 
+    public Object[] dataSpChiTiet(){
+        return new Object[]{this.MaCTSP,this.SoLuong,this.DonGia,this.MaSP.getTenSP(),this.MaCLDe.getTenChatLieuDe(),this.MaSize.getKichThuoc(),this.MaMS.getTenMau(),this.MaCL.getTenChatLieu(),this.MoTa,this.MaGG.getTenMaGiam()};
+    }
 }

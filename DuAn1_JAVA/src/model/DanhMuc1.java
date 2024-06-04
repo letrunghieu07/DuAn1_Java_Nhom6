@@ -18,6 +18,14 @@ public class DanhMuc1 {
         this.TrangThai = TrangThai;
     }
 
+    public DanhMuc1(int MaDM) {
+        this.MaDM = MaDM;
+    }
+
+    public DanhMuc1(String TenDanhMuc) {
+        this.TenDanhMuc = TenDanhMuc;
+    }
+    
     public int getMaDM() {
         return MaDM;
     }
@@ -52,7 +60,9 @@ public class DanhMuc1 {
         return TenDanhMuc;
     }
     
-    
+    public Object[] dataDanhMuc(){
+        return new Object[]{this.MaDM,this.TenDanhMuc,this.TrangThai};
+    }
     
     
     
