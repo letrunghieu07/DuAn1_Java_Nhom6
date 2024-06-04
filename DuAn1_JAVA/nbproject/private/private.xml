@@ -5,6 +5,9 @@
         <group>
             <file>file:/D:/DuAn1_Java_Nhom6/DuAn1_JAVA/src/views/JFrameBanHang.java</file>
             <file>file:/D:/DuAn1_Java_Nhom6/DuAn1_JAVA/src/views/JFrameLoginForm.java</file>
+            <file>file:/D:/DuAn1_Java_Nhom6/DuAn1_JAVA/src/utilities/JdbcHelper.java</file>
+            <file>file:/D:/DuAn1_Java_Nhom6/DuAn1_JAVA/src/views/JFrameMain.java</file>
+            <file>file:/D:/DuAn1_Java_Nhom6/DuAn1_JAVA/src/views/JFrameSanPham.java</file>
         </group>
     </open-files>
 </project-private>

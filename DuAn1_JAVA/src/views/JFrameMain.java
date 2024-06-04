@@ -32,6 +32,7 @@ public class JFrameMain extends javax.swing.JFrame {
         }
         ngDN();
 
+        
     }
 
     void ngDN() {
