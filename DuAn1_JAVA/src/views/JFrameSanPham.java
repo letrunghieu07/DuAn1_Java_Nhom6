@@ -1665,6 +1665,10 @@ public class JFrameSanPham extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Đơn giá phải là số lớn hơn 0");
                 return false;
             }
+            if (Gia > 50000000) {
+                JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 50,000,000");
+                return false;
+            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Đơn giá phải là số thực hợp lệ");
             return false;

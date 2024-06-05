@@ -29,6 +29,7 @@ public class JFrameMain extends javax.swing.JFrame {
             btnThongKe.setVisible(false);
             btnKhachHang.setVisible(false);
             btnSanPham.setVisible(false);
+            
         }
         ngDN();
 
@@ -339,7 +340,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void btnVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoucherActionPerformed
         setVisible(false);
-        new JFrameVoucher().setVisible(true);
+        new quanLyKM().setVisible(true);
     }//GEN-LAST:event_btnVoucherActionPerformed
 
     private void btnBanHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanHangActionPerformed

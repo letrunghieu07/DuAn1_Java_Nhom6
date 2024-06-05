@@ -571,8 +571,6 @@ public class JFrameKhacHang extends javax.swing.JFrame {
         } else {
             MsgBox.alert(this, "Bạn không được phép xóa");
         }
-
-
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
