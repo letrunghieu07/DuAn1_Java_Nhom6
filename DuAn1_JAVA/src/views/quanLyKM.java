@@ -77,7 +77,7 @@ public class quanLyKM extends javax.swing.JFrame {
         ngayketthuctxt.setText("");
         mucGiamGiaTxt.setText("");
         maAPDungTxt.setText("");
-        vNDRB.setSelected(true);
+        vNDRB.setSelected(false);
         trangThaiCB.setSelectedIndex(0);
     } 
     
@@ -289,6 +289,7 @@ public class quanLyKM extends javax.swing.JFrame {
         vNDRB.setText("VND");
 
         buttonGroup1.add(phanTramRB);
+        phanTramRB.setSelected(true);
         phanTramRB.setText("%");
 
         khuyenMaiTbl.setModel(new javax.swing.table.DefaultTableModel(
@@ -375,20 +376,21 @@ public class quanLyKM extends javax.swing.JFrame {
             jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnCRUD4Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
+                .addGroup(jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnThemKM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCapNhatKM, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
                 .addGroup(jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnClearForm, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpnCRUD4Layout.createSequentialGroup()
-                        .addGroup(jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnThemKM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCapNhatKM, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
-                        .addGroup(jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpnCRUD4Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnUpdateKM, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnCRUD4Layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(btnXoaKM, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnUpdateKM, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnCRUD4Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(btnXoaKM, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnCRUD4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnClearForm, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58))
         );
         jpnCRUD4Layout.setVerticalGroup(
             jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,9 +402,9 @@ public class quanLyKM extends javax.swing.JFrame {
                 .addGroup(jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCapNhatKM, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdateKM, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(btnClearForm, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
 
         jLabel1.setText("Mã App Dụng");
@@ -555,30 +557,30 @@ public class quanLyKM extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearFormActionPerformed
 
     private void btnXoaKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaKMActionPerformed
- try {
-        int selectedRow = khuyenMaiTbl.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khuyến mãi để xóa!");
-            return;
-        }
-
-        int maKM = (int) khuyenMaiTbl.getValueAt(selectedRow, 0);
-
-        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khuyến mãi này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.NO_OPTION) {
-            return;
-        }
-
-        boolean check = repoKM.deleteKhuyenMai(maKM);
-        if (check) {
-            JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công!");
-            fillKhuyenMaiTbl(); 
-        } else {
-            JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thất bại!");
-        }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
-    }
+// try {
+//        int selectedRow = khuyenMaiTbl.getSelectedRow();
+//        if (selectedRow == -1) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khuyến mãi để xóa!");
+//            return;
+//        }
+//
+//        int maKM = (int) khuyenMaiTbl.getValueAt(selectedRow, 0);
+//
+//        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khuyến mãi này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+//        if (confirm == JOptionPane.NO_OPTION) {
+//            return;
+//        }
+//
+//        boolean check = repoKM.deleteKhuyenMai(maKM);
+//        if (check) {
+//            JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công!");
+//            fillKhuyenMaiTbl(); 
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thất bại!");
+//        }
+//    } catch (Exception e) {
+//        JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+//    }
     }//GEN-LAST:event_btnXoaKMActionPerformed
 
     private void btnCapNhatKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatKMActionPerformed
@@ -601,13 +603,13 @@ public class quanLyKM extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu!");
             return;
         }
-        Date ngayBatDau = new SimpleDateFormat("dd-MM-yyyy").parse(ngayBatDauStr);
+        Date ngayBatDau = new SimpleDateFormat("yyyy-MM-dd").parse(ngayBatDauStr);
 
         if (ngayKetThucStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày kết thúc!");
             return;
         }
-        Date ngayKetThuc = new SimpleDateFormat("dd-MM-yyyy").parse(ngayKetThucStr);
+        Date ngayKetThuc = new SimpleDateFormat("yyyy-MM-dd").parse(ngayKetThucStr);
 
         if (!ngayKetThuc.after(ngayBatDau)) {
             JOptionPane.showMessageDialog(this, "Ngày kết thúc phải lớn hơn ngày bắt đầu!");
@@ -661,8 +663,8 @@ try {
             return;
         }
 
-        Date ngayBatDau = new SimpleDateFormat("dd-MM-yyyy").parse(ngayBatDauStr);
-        Date ngayKetThuc = new SimpleDateFormat("dd-MM-yyyy").parse(ngayKetThucStr);
+        Date ngayBatDau = new SimpleDateFormat("yyyy-MM-dd").parse(ngayBatDauStr);
+        Date ngayKetThuc = new SimpleDateFormat("yyyy-MM-dd").parse(ngayKetThucStr);
         java.sql.Date ngayBatDauSql = new java.sql.Date(ngayBatDau.getTime());
         java.sql.Date ngayKetThucSql = new java.sql.Date(ngayKetThuc.getTime());
 

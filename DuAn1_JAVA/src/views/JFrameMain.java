@@ -29,14 +29,13 @@ public class JFrameMain extends javax.swing.JFrame {
             btnThongKe.setVisible(false);
             btnKhachHang.setVisible(false);
             btnSanPham.setVisible(false);
-            
-        }
-        ngDN();
 
-        
+        }
+        phanQuyen();
+
     }
 
-    void ngDN() {
+    void phanQuyen() {
         String ten = Auth.User.getHoTen();
         int chucvu = Auth.User.getChucVu();
 //        ?"Admin":"Nhân viên"

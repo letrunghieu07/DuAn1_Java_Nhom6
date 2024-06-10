@@ -4,20 +4,108 @@
  */
 package views;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import model.HoaDonChiTietq;
+import model.HoaDonq;
+import model.hoaDon;
+import repository.BanHangRepository;
+import repository.HoaDonRepository;
+
 /**
  *
  * @author trung
  */
 public class JFrameHoaDon extends javax.swing.JFrame {
 
+    private HoaDonRepository hoaDonRepository ;
+//    private final HoaDonChiTietDAO hoaDonChiTietDAO;
+    private DefaultTableModel modelTable = new DefaultTableModel();
+    private DefaultTableModel modelTable2 = new DefaultTableModel();
+    
+     BanHangRepository banHangRepository = new BanHangRepository();
     /**
      * Creates new form JFrameBanHang
      */
     public JFrameHoaDon() {
+        
+        this.hoaDonRepository = new HoaDonRepository();
         initComponents();
         setLocationRelativeTo(null);
+//        loadTableHoaDon();
+        fillDSHDCho();
+         tblHoaDon.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = tblHoaDon.getSelectedRow();
+                    if (selectedRow != -1) {
+                        // Lấy mã hóa đơn từ dòng được chọn trong jTable1
+                        int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
+                        // Hiển thị chi tiết hóa đơn trong jTable2
+                        hienThiChiTietHoaDon(maHD);
+                    }
+                }
+            }
+        });
+    }
+    
+   
+    
+      // Fill hóa đơn chờ
+    void fillDSHDCho() {
+        System.out.println("abc");
+        int trangThai = 1;
+        
+
+        ArrayList<hoaDon> listHD = hoaDonRepository.getHoaDonCho(trangThai);
+
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
+
+        for (hoaDon hd : listHD) {
+            Object[] data = {
+                hd.getMaHD(),
+                hd.getTenNV(),
+                hd.getNgayTao(),
+                hd.getTrangThai() ? "Đã thanh toán" : "Chưa thanh toán"
+            };
+            model.addRow(data);
+        }
+    }
+    
+     public void hienThiChiTietHoaDon(int maHD) {
+        modelTable2 = (DefaultTableModel) tblChiTietHoaDon.getModel();
+
+        modelTable2.setRowCount(0); // Xóa dữ liệu cũ trước khi hiển thị dữ liệu mới
+
+        List<HoaDonChiTietq> chiTietList = this.hoaDonRepository.timKiemHoaDonBangMa(maHD);
+        for (HoaDonChiTietq hoaDonChiTiet : chiTietList) {
+            Object[] rowData = {
+                hoaDonChiTiet.getMaHDCT(),
+                // hoaDonChiTiet.getHoTenNV(),
+                hoaDonChiTiet.getTenKH(),
+                hoaDonChiTiet.getTenSP(),
+                hoaDonChiTiet.getTenCLD(),
+                hoaDonChiTiet.getSize(),
+                hoaDonChiTiet.getTenMau(),
+                hoaDonChiTiet.getSoLuong(),
+                hoaDonChiTiet.getDonGia(),
+                hoaDonChiTiet.getTongTien(),
+                hoaDonChiTiet.getMucGiam(),
+                hoaDonChiTiet.getSoTienConLai()
+
+            };
+            modelTable2.addRow(rowData);
+        }
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -35,6 +123,14 @@ public class JFrameHoaDon extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblHoaDon = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblChiTietHoaDon = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        txtTimKiem = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,7 +201,7 @@ public class JFrameHoaDon extends javax.swing.JFrame {
                 .addComponent(btnBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 349, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 399, Short.MAX_VALUE)
                 .addComponent(btnHome)
                 .addGap(24, 24, 24))
         );
@@ -135,15 +231,79 @@ public class JFrameHoaDon extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
 
+        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Mã HD", "Họ tên", "Ngày Tạo", "Trạng thái"
+            }
+        ));
+        jScrollPane1.setViewportView(tblHoaDon);
+
+        tblChiTietHoaDon.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Mã HDCT", "Tên Khách", "Tên SP", "Chất liệu đế", "Kích thước", "Màu sắc", "Số lượng", "Đơn giá", "Tổng tiền", "Mức giảm", "Thanh toán"
+            }
+        ));
+        jScrollPane2.setViewportView(tblChiTietHoaDon);
+
+        jLabel3.setText("Tim kiem");
+
+        jButton4.setText("Tìm kiếm");
+
+        jButton5.setText("In hóa đơn");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addGap(18, 18, 18)
+                .addComponent(jButton5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
+                .addGap(7, 7, 7))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(331, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -235,9 +395,17 @@ public class JFrameHoaDon extends javax.swing.JFrame {
     private javax.swing.JButton btnHoaDon;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel jpnNavigation;
+    private javax.swing.JTable tblChiTietHoaDon;
+    private javax.swing.JTable tblHoaDon;
+    private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }

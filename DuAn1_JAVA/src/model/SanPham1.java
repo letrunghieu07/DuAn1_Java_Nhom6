@@ -97,8 +97,18 @@ public class SanPham1 {
     public String toString() {
         return TenSP;
     }
+    public String getTrangThai(){
+        String trangThai;
+        if(this.isTrangThai()){
+            trangThai = "Còn hàng";
+        }else{
+            trangThai = "Ngưng bán";
+        }
+        return trangThai;
+    }
+
     
     public Object[] dataSanPham(){
-        return new Object[]{this.MaSP,this.TenSP,this.NgayNhap,this.NgayCapNhat,this.TrangThai,this.MaDM.getTenDanhMuc()};
+        return new Object[]{this.MaSP,this.TenSP,this.NgayNhap,this.NgayCapNhat,this.getTrangThai(),this.MaDM.getTenDanhMuc()};
     }
 }

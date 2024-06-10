@@ -14,11 +14,14 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.KhachHang;
+import model.Voucher;
 import model.chiTietSanPham;
 import model.hoaDon;
 import model.hoaDonChiTiet;
 import repository.Auth;
 import repository.BanHangRepository;
+import repository.MsgBox;
 
 /**
  *
@@ -354,8 +357,296 @@ public class JFrameBanHang extends javax.swing.JFrame {
         }
 
     }
-    
-    
+
+    // lấy thông tin khách hàng
+    void getKhachHang() {
+        ArrayList<KhachHang> listkh = banHangRepository.getKhachHang();
+        String sdt = txtSDTKhach.getText();
+        for (KhachHang kh : listkh) {
+            if (!kh.getSdt().equals(sdt)) {
+                lblTenKhach.setText("Không tim thấy!");
+            } else {
+                if (kh.getTrangThai() == 1) {
+                    lblTenKhach.setText(kh.getTenKH());
+                    return;
+                }
+            }
+        }
+    }
+
+    // Lấy hóa đơn và tính tiền
+    ArrayList<Voucher> listKM = banHangRepository.getVoucher();
+
+    Voucher loadVoucher() {
+        String maKhuyenMai = txtMaVoucher.getText();
+        if (maKhuyenMai == null) {
+            txtTenVoucher.setText("");
+            String patternTienTe = "###,###,###";
+            DecimalFormat formartTienTe = new DecimalFormat(patternTienTe);
+            String stringTienTe = formartTienTe.format(tinhTongTien());
+            lblTongTien.setText(stringTienTe);
+            return null;
+        }
+        for (Voucher km : listKM) {
+            if (km.getMaGiam().equals(maKhuyenMai)) {
+                txtTenVoucher.setText(km.getTenKhuyenMai());
+                lblMucGiam.setText(km.getMucGiam() + " " + km.getDonVi());
+                tinhKhuyenMai(km.getDonVi(), km.getMucGiam());
+                return km;
+
+            } else {
+                txtTenVoucher.setText("Không tìm thấy");
+                String patternTienTe = "###,###,###";
+                DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+                String stringTienTe = formatTienTe.format(tinhTongTien());
+                lblTongTien.setText(stringTienTe);
+                lblMucGiam.setText("");
+            }
+
+        }
+
+        return null;
+    }
+
+    // Tính khuyến mại voucher
+    void tinhKhuyenMai(String donVi, float mucGiam) {
+        float mucGiam1 = mucGiam;
+        if (donVi.equals("VNĐ")) {
+            mucGiam1 = tinhTongTien() - mucGiam1;
+            if (mucGiam1 <= 0) {
+                lblTongTien.setText(0 + "");
+                return;
+            }
+            String patternTienTe = "###,###,###";
+            DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+            String stringTienTe = formatTienTe.format(mucGiam1);
+            lblTongTien.setText(stringTienTe);
+        } else {
+            mucGiam1 = tinhTongTien() * ((100 - mucGiam) / 100);
+            if (mucGiam1 <= 0) {
+                lblTongTien.setText(0 + "");
+                return;
+            }
+            String patternTienTe = "###,###,###";
+            DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+            String stringTienTe = formatTienTe.format(mucGiam1);
+            lblTongTien.setText(stringTienTe);
+        }
+
+    }
+
+    void clearForm() {
+        DefaultTableModel model = (DefaultTableModel) tblGioHang.getModel();
+        model.setRowCount(0);
+        txtMaHD.setText("");
+        txtTenNV.setText("");
+        txtNgayTao.setText("");
+        txtSDTKhach.setText("");
+        lblTenKhach.setText("");
+        lblTongTien.setText("");
+        txtMaVoucher.setText("");
+        txtTenVoucher.setText("");
+        lblMucGiam.setText("");
+        cboHinhThucThanhToan.setSelectedIndex(0);
+        txtTienKhachDua.setText("");
+        lblTienThua.setText("");
+    }
+
+//    
+//    
+//    
+    void hinhThucThanhToan() {
+        int rowSelected = tblHoaDon.getSelectedRow();
+        if (rowSelected < 0) {
+            return;
+        }
+
+        if (cboHinhThucThanhToan.getSelectedIndex() == 0) {
+            if (loadVoucher() == null) {
+                int tongTien = tinhTongTien();
+                txtTienKhachDua.setEditable(false);
+                txtTienKhachDua.setText(tongTien + " ");
+                tinhtienThua();
+            } else {
+                float khuyenMai = loadVoucher().getMucGiam();
+                if (loadVoucher().getDonVi().equals("VNĐ")) {
+                    khuyenMai = tinhTongTien() - khuyenMai;
+                    if (khuyenMai <= 0) {
+                        khuyenMai = 0;
+                    }
+                } else {
+                    khuyenMai = tinhTongTien() * ((100 - khuyenMai) / 100);
+                    if (khuyenMai <= 0) {
+                        khuyenMai = 0;
+                    }
+                }
+                txtTienKhachDua.setEditable(false);
+                txtTienKhachDua.setText(khuyenMai + "");
+                tinhtienThua();
+            }
+
+        } else {
+            txtTienKhachDua.setEditable(true);
+        }
+    }
+
+//Tính tiền thừa
+    void tinhtienThua() {
+        int rowSelected = tblHoaDon.getSelectedRow();
+        if (rowSelected < 0) {
+            return;
+        }
+        if (txtTienKhachDua.getText().isEmpty()) {
+            lblTienThua.setText("");
+            return;
+        }
+
+        int tongTien = tinhTongTien();
+        float tienKhachDua;
+
+        try {
+            tienKhachDua = Float.parseFloat(txtTienKhachDua.getText());
+            if (loadVoucher() != null) {
+                Voucher km = loadVoucher();
+                float giamGia = km.getMucGiam();
+                String donVi = km.getDonVi();
+                if (donVi.equals("VNĐ")) {
+                    giamGia = tinhTongTien() - giamGia;
+                    float tienThua = tienKhachDua - giamGia;
+                    if (tienThua < 0) {
+                        lblTienThua.setText("");
+                        return;
+                    }
+                    if (tienThua == 0) {
+                        lblTienThua.setText("0");
+                        return;
+                    }
+                    String patternTienTe = "###,###,###";
+                    DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+                    String stringTienTe = formatTienTe.format(tienThua);
+                    lblTienThua.setText(stringTienTe + "");
+                    return;
+                } else {
+                    giamGia = tinhTongTien() * ((100 - km.getMucGiam()) / 100);
+                    float tienThua = tienKhachDua - giamGia;
+                    if (tienThua < 0) {
+                        lblTienThua.setText("");
+                        return;
+                    }
+                    if (tienThua == 0) {
+                        lblTienThua.setText("0");
+                        return;
+                    }
+                    String patternTienTe = "###,###,###";
+                    DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+                    String stringTienTe = formatTienTe.format(tienThua);
+                    lblTienThua.setText(stringTienTe + "");
+                    return;
+                }
+            }
+            float tienThua = tienKhachDua - tongTien;
+            if (tienThua < 0) {
+                lblTienThua.setText("");
+                return;
+            }
+            if (tienThua == 0) {
+                lblTienThua.setText("0");
+                return;
+            }
+            String patternTienTe = "###,###,###";
+            DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+            String stringTienTe = formatTienTe.format(tienThua);
+            lblTienThua.setText(stringTienTe + "");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Chỉ Nhập số");
+            txtTienKhachDua.setText("");
+            lblTienThua.setText("");
+        }
+
+    }
+
+    void updateHoaDon(boolean trangThai, String message) {
+        ArrayList<KhachHang> listkh = banHangRepository.getKhachHang();
+        if (tblGioHang.getRowCount() <= 0) {
+            MsgBox.alert(this, "Thanh toán thất bại: \n Hóa đơn trống");
+//JOptionPane.showMessageDialog(this, "Thanh toán thất bại: \n Hóa đơn trống");
+            return;
+        }
+        LocalDateTime ldt = LocalDateTime.now();
+        String dateNow = (DateTimeFormatter.ofPattern("MM-dd-yyyy", Locale.ENGLISH).format(ldt));
+        String ngayTao = dateNow;
+        String sdt = txtSDTKhach.getText();
+        String tienThua = lblTienThua.getText();
+        if (tienThua.isEmpty()) {
+            MsgBox.alert(this, "Chưa đủ tiền thanh toán");
+            return;
+        }
+
+        int rowSelected = tblHoaDon.getSelectedRow();
+        if (rowSelected < 0) {
+            MsgBox.alert(this, "Chưa chọn hóa đơn thao tác");
+            return;
+        }
+        int maHD = (int) tblHoaDon.getValueAt(rowSelected, 0);
+        float tongTien = tinhTongTien();
+        int maTTkH = 0;
+        String hinThucThanhToan = cboHinhThucThanhToan.toString();
+        for (KhachHang kh : listkh) {
+            if (kh.getSdt().equals(sdt)) {
+                maTTkH = kh.getMaKH();
+            }
+        }
+
+        int choice = JOptionPane.showConfirmDialog(this, message, "Sneaker-Store", JOptionPane.YES_NO_OPTION);
+        if (choice == 0) {
+            if (loadVoucher() == null) {
+                if (maTTkH == 0) {
+                    banHangRepository.updateHoaDon2(maHD, ngayTao, trangThai, tongTien);
+                    banHangRepository.insertThanhToan2(maHD, hinThucThanhToan);
+                    fillDSHDCho();
+                    clearForm();
+                    return;
+                }
+                banHangRepository.updateHoaDon(maHD, ngayTao, trangThai, tongTien, maTTkH);
+                banHangRepository.insertThanhToan(maHD, maTTkH, hinThucThanhToan);
+                txtSDTKhach.setText("");
+                lblTenKhach.setText("");
+                fillDSHDCho();
+                clearForm();
+                return;
+            } else {
+                float giamGia = loadVoucher().getMucGiam();
+                if (loadVoucher().getDonVi().equals("VNĐ")) {
+                    giamGia = tinhTongTien() - giamGia;
+                    if (giamGia <= 0) {
+                        giamGia = 0;
+                    }
+                } else {
+                    giamGia = tinhTongTien() * ((100 - giamGia) / 100);
+                    if (giamGia <= 0) {
+                        giamGia = 0;
+                    }
+                }
+
+                if (maTTkH == 0) {
+                    banHangRepository.updateHoaDon2(maHD, ngayTao, trangThai, tongTien);
+                    banHangRepository.insertThanhToan2(maHD, hinThucThanhToan);
+                    banHangRepository.insertHDKM(maHD, loadVoucher().getMaKM(), giamGia);
+                    fillDSHDCho();
+                    clearForm();
+                    return;
+                }
+                banHangRepository.updateHoaDon(maHD, ngayTao, trangThai, tongTien, maTTkH);
+                banHangRepository.insertThanhToan(maHD, maTTkH, hinThucThanhToan);
+                banHangRepository.insertHDKM(maHD, loadVoucher().getMaKM(), giamGia);
+                txtSDTKhach.setText("");
+                lblTenKhach.setText("");
+                fillDSHDCho();
+                clearForm();
+
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -623,6 +914,11 @@ public class JFrameBanHang extends javax.swing.JFrame {
 
         jLabel11.setText("SDT khách");
 
+        txtSDTKhach.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSDTKhachActionPerformed(evt);
+            }
+        });
         txtSDTKhach.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtSDTKhachKeyReleased(evt);
@@ -671,6 +967,11 @@ public class JFrameBanHang extends javax.swing.JFrame {
         jLabel20.setText("Tiền khách đưa:");
 
         txtTienKhachDua.setText(" ");
+        txtTienKhachDua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTienKhachDuaActionPerformed(evt);
+            }
+        });
         txtTienKhachDua.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtTienKhachDuaKeyPressed(evt);
@@ -1073,7 +1374,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void txtSDTKhachKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSDTKhachKeyReleased
-
+        getKhachHang();
     }//GEN-LAST:event_txtSDTKhachKeyReleased
 
     private void txtMaVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaVoucherActionPerformed
@@ -1081,11 +1382,11 @@ public class JFrameBanHang extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMaVoucherActionPerformed
 
     private void txtMaVoucherKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMaVoucherKeyReleased
-
+        loadVoucher();
     }//GEN-LAST:event_txtMaVoucherKeyReleased
 
     private void cboHinhThucThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboHinhThucThanhToanActionPerformed
-
+        hinhThucThanhToan();
     }//GEN-LAST:event_cboHinhThucThanhToanActionPerformed
 
     private void txtTienKhachDuaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTienKhachDuaKeyPressed
@@ -1094,11 +1395,15 @@ public class JFrameBanHang extends javax.swing.JFrame {
 
     private void txtTienKhachDuaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTienKhachDuaKeyReleased
         // TODO add your handling code here:
-
+        tinhtienThua();
     }//GEN-LAST:event_txtTienKhachDuaKeyReleased
 
     private void btnTaoHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHDActionPerformed
         // TODO add your handling code here:
+        if (tblHoaDon.getRowCount() == 10) {
+            JOptionPane.showMessageDialog(this, "Tạo hóa đơn mới thất bại: \nSố Lượng hóa đơn chờ đạt giới hạn");
+            return;
+        }
         insertHDCho();
         fillDSHDCho();
     }//GEN-LAST:event_btnTaoHDActionPerformed
@@ -1110,7 +1415,8 @@ public class JFrameBanHang extends javax.swing.JFrame {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-
+        updateHoaDon(true, "Xác nhận thanh toán hóa đơn");
+        JOptionPane.showMessageDialog(this, "Xác nhận thanh toán hóa đơn");
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void txtTenVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenVoucherActionPerformed
@@ -1128,6 +1434,16 @@ public class JFrameBanHang extends javax.swing.JFrame {
     private void btnXoa1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoa1ActionPerformed
         deleteAllGH();
     }//GEN-LAST:event_btnXoa1ActionPerformed
+
+    private void txtSDTKhachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTKhachActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtSDTKhachActionPerformed
+
+    private void txtTienKhachDuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTienKhachDuaActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtTienKhachDuaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1226,7 +1542,4 @@ public class JFrameBanHang extends javax.swing.JFrame {
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 
-    private ComboBoxModel<String> DefaultComboBoxModel(String[] httt) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

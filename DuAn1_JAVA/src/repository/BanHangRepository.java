@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.KhachHang;
+import model.Voucher;
 import model.chiTietSanPham;
 import model.hoaDon;
 import model.hoaDonChiTiet;
@@ -322,5 +324,248 @@ public class BanHangRepository {
         }
     }
     
+    
+//    
+//    
+//    
+//    
+    public ArrayList getVoucher() {
+        ArrayList<Voucher> listVoucher = new ArrayList<>();
+        String query = "select * from KHUYEN_MAI";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Voucher kM = new Voucher();
+                kM.setMaKM(rs.getInt("MaKM"));
+                kM.setTenKhuyenMai(rs.getString("TenKhuyenMai"));
+                kM.setNgayBD(rs.getDate("NgayBD"));
+                kM.setNgayKT(rs.getDate("NgayKT"));
+                kM.setMucGiam(rs.getFloat("MucGiam"));
+                kM.setMaGiam(rs.getString("MaGiam"));
+//                if (rs.getInt("TrangThai") == 0) {
+//                    kM.setTrangThai(" Không hoạt động");
+//                } else {
+//                    kM.setTrangThai("Đang hoạt động");
+//                }
+
+                kM.setTrangThai(rs.getInt("TrangThai") == 0 ? "Không hoạt động" : "Đang hoạt động");
+
+//                if (rs.getInt("DonVi") == 0) {
+//                    kM.setDonVi("VNĐ");
+//                } else {
+//                    kM.setDonVi("%");
+//                }
+                kM.setDonVi(rs.getInt("DonVi") == 0 ? "VNĐ" : "%");
+                listVoucher.add(kM);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listVoucher;
+    }
+
+    
+    // public boolean 
+    public ArrayList getKhachHang() {
+        ArrayList<KhachHang> list = new ArrayList<>();
+        String query = "SELECT MaTTKH,TenKH,SDT,NgayCN,TrangThai FROM THONG_TIN_KH";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                KhachHang kh = new KhachHang();
+                kh.setMaKH(rs.getInt("MaTTKH"));
+                kh.setTenKH(rs.getString("TenKH"));
+                kh.setSdt(rs.getString("SDT"));
+
+                kh.setNgayCN(rs.getString("NgayCN"));
+                kh.setTrangThai(rs.getInt("TrangThai"));
+                list.add(kh);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    
+     public boolean updateHoaDon(int maHD, String ngayTao, boolean trangThai, float tongTien, int maKH) {
+        String query = "update HOA_DON\n"
+                + "set NgayTao = ?, TrangThai = ?, TongTien = ?,maTTKH =?\n"
+                + "where MaHD = ?";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, ngayTao);
+            pstmt.setBoolean(2, trangThai);
+            pstmt.setFloat(3, tongTien);
+            pstmt.setInt(4, maKH);
+            pstmt.setInt(5, maHD);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+     
+     
+      public boolean updateHDCT(int maTT, int maKM, int maHD) {
+        System.out.println("abcdfd");
+        String query = "update Hoa_Don_Chi_Tiet  set maTT =?, maKM=? where maHD =?";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, maTT);
+            pstmt.setInt(2, maKM);
+            pstmt.setInt(3, maHD);
+            pstmt.execute();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+      
+       public boolean updateHoaDon2(int maHD, String ngayTao, boolean trangThai, float tongTien) {
+        String query = "update Hoa_Don set ngayTao =?, trangThai= ?, tongTien = ? where maHD =?";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, ngayTao);
+            pstmt.setBoolean(2, trangThai);
+            pstmt.setFloat(3, tongTien);
+            pstmt.setInt(4, maHD);
+            pstmt.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+       
+       public boolean insertThanhToan(int maHD, int maTKKH, String hinhThucThanhToan) {
+        String query = "insert into THANH_TOAN (HinhThucThanhToan, MaTTKH, MaHD)\n"
+                + "values(?,?,?)";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, hinhThucThanhToan);
+            pstmt.setInt(2, maTKKH);
+            pstmt.setInt(3, maHD);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean insertThanhToan2(int maHD, String hinhThucThanhToan) {
+        String query = "insert into THANH_TOAN (HinhThucThanhToan, MaHD)\n"
+                + "values(?,?)";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, hinhThucThanhToan);
+            pstmt.setInt(2, maHD);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean updateKhuyenMai(int maKM, String tenKhuyenMai, Date ngayBD, Date ngayKT, float mucGiam, String maGiam, int trangThai, int donVi) {
+        String query = "Update KHUYEN_MAI\n"
+                + "set TenKhuyenMai = ?, NgayBD = ?, NgayKT= ?, MucGiam = ?,MaGiam = ?, TrangThai = ?, DonVi = ?\n"
+                + "where MaKM = ?";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, tenKhuyenMai);
+            pstmt.setDate(2, ngayBD);
+            pstmt.setDate(3, ngayKT);
+            pstmt.setFloat(4, mucGiam);
+            pstmt.setString(5, maGiam);
+            pstmt.setInt(6, trangThai);
+            pstmt.setInt(7, donVi);
+            pstmt.setInt(8, maKM);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean insertHDKM(int maHD, int maKM, float soTienConLai) {
+        String query = "INSERT INTO HOA_DON_KHUYEN_MAI (MaHD, MaKM, SoTienConlai)\n"
+                + "VALUES(?,?,?)";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, maHD);
+            pstmt.setInt(2, maKM);
+            pstmt.setFloat(3, soTienConLai);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+    
+     public List<chiTietSanPham> listAll2() {
+        List<chiTietSanPham> listAll = new ArrayList<>();
+        String query = """
+                     select CHI_TIET_SAN_PHAM.MaCTSP, SAN_PHAM.TenSP, CHAT_LIEU_DE_GIAY.TenChatLieuDe, 
+                                        SIZE.KichThuoc, MAU_SAC.TenMau, CHAT_LIEU.TenChatLieu,  
+                                        CHI_TIET_SAN_PHAM.DonGia,CHI_TIET_SAN_PHAM.SoLuong, Giam_Gia.MucGiam,CHI_TIET_SAN_PHAM.mota 
+                                        from CHI_TIET_SAN_PHAM 
+                                          
+                     			join SAN_PHAM on SAN_PHAM.MaSP =  CHI_TIET_SAN_PHAM.MaSP 
+                                        join CHAT_LIEU_DE_GIAY on CHAT_LIEU_DE_GIAY.MaCLDe  =  CHI_TIET_SAN_PHAM.MaCLDe
+                                        join SIZE on SIZE.MaSize =  CHI_TIET_SAN_PHAM.MaSize
+                                        join MAU_SAC on MAU_SAC.MaMS =  CHI_TIET_SAN_PHAM.MaMS
+                                        Left join Giam_Gia on Giam_Gia.MaGG= CHI_TIET_SAN_PHAM.MaGG
+                                        join CHAT_LIEU on CHAT_LIEU.MaCL =  CHI_TIET_SAN_PHAM.MaCL""";
+
+        Connection conn = null;
+        try {
+            conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                chiTietSanPham CTSP = new chiTietSanPham();
+                CTSP.setMaCTSP(rs.getInt("MaCTSP"));
+                CTSP.setTenSP(rs.getString("TenSP"));
+                CTSP.setTenCLDe(rs.getString("TenChatLieuDe"));
+                CTSP.setTenSize(rs.getInt("KichThuoc"));
+                CTSP.setTenMS(rs.getString("TenMau"));
+                CTSP.setTenCL(rs.getString("TenChatLieu"));
+                CTSP.setDonGia(rs.getFloat("DonGia"));
+                CTSP.setSoLuong(rs.getInt("SoLuong"));
+                CTSP.setMucGG(rs.getFloat("MucGiam"));
+                CTSP.setMoTa(rs.getString("mota"));
+
+                listAll.add(CTSP);
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listAll;
+    }
 
 }

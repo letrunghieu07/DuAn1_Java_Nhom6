@@ -68,6 +68,28 @@ public class JFrameSanPham extends javax.swing.JFrame {
         this.fillCtsp(sanPhamRepo.getChiTietSanPham1());
     }
 
+    public void clear() {
+        txtMaSP.setText("");
+        txtNgayNhap.setText("");
+        txtNgayCapNhat.setText("");
+        txtTenSP.setText("");
+        rdoConHang.setSelected(true);
+        cboDanhMuc.setSelectedIndex(0);
+    }
+
+    public void clear2() {
+        txtMaCTSP.setText("");
+        txtSoLuong.setText("");
+        txtDonGia.setText("");
+        cboGiamGia.setSelectedIndex(0);
+        txtMoTa.setText("");
+        cboSanPham.setSelectedIndex(0);
+        cboChatLieuDG.setSelectedIndex(0);
+        cboChatLieuMG.setSelectedIndex(0);
+        cboMauSac.setSelectedIndex(0);
+        cboSize.setSelectedIndex(0);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1066,29 +1088,30 @@ public class JFrameSanPham extends javax.swing.JFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-       if(checkSp()){
+        if (checkSp()) {
             if (sanPhamRepo.addSanPham(this.readSp()) > 0) {
-            JOptionPane.showMessageDialog(this, "Them thanh cong");
-        } else {
-            JOptionPane.showMessageDialog(this, "Them that bai");
+                JOptionPane.showMessageDialog(this, "Them thanh cong");
+            } else {
+                JOptionPane.showMessageDialog(this, "Them that bai");
+            }
+            this.fillSanPham(sanPhamRepo.getSanPham());
         }
-        this.fillSanPham(sanPhamRepo.getSanPham());
-       }
+        clear();
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         index = tblSanPham.getSelectedRow();
         Integer ma = Integer.parseInt(tblSanPham.getValueAt(index, 0).toString());
-        if(checkSp()){
+        if (checkSp1()) {
             if (sanPhamRepo.updateSanPham(this.readSp2(), ma) > 0) {
-            JOptionPane.showMessageDialog(this, "Sửa Thành công ");
-            this.fillSanPham(sanPhamRepo.getSanPham());
-        } else {
-            JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                JOptionPane.showMessageDialog(this, "Sửa Thành công ");
+                this.fillSanPham(sanPhamRepo.getSanPham());
+            } else {
+                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+            }
         }
-        }
-
+        clear();
 
     }//GEN-LAST:event_btnSuaActionPerformed
 
@@ -1099,12 +1122,13 @@ public class JFrameSanPham extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-        txtMaSP.setText("");
-        txtNgayNhap.setText("");
-        txtNgayCapNhat.setText("");
-        txtTenSP.setText("");
-        rdoConHang.setSelected(true);
-        cboDanhMuc.setSelectedIndex(0);
+//        txtMaSP.setText("");
+//        txtNgayNhap.setText("");
+//        txtNgayCapNhat.setText("");
+//        txtTenSP.setText("");
+//        rdoConHang.setSelected(true);
+//        cboDanhMuc.setSelectedIndex(0);
+        clear();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void cboSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSanPhamActionPerformed
@@ -1131,25 +1155,29 @@ public class JFrameSanPham extends javax.swing.JFrame {
     private void btnSuaCTSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaCTSPActionPerformed
         index = tblCTSP.getSelectedRow();
         Integer ma = Integer.parseInt(tblCTSP.getValueAt(index, 0).toString());
-        if(checkSpct()){
+        if (checkSpct()) {
             if (sanPhamRepo.updateSanPhamCT(this.readCtsp1(), ma) > 0) {
-            JOptionPane.showMessageDialog(this, "Sửa Thành công ");
-            this.fillCtsp(sanPhamRepo.getChiTietSanPham1());
-        } else {
-            JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                JOptionPane.showMessageDialog(this, "Sửa Thành công ");
+                this.fillCtsp(sanPhamRepo.getChiTietSanPham1());
+            } else {
+                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+            }
         }
-        }
+        clear2();
+
     }//GEN-LAST:event_btnSuaCTSPActionPerformed
 
     private void btnThemCTSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemCTSPActionPerformed
-       if(checkSpct()){
-        if (sanPhamRepo.addCtSanPham(this.readCtsp1()) > 0) {
-            JOptionPane.showMessageDialog(this, "thêm thành công");
-        } else {
-            JOptionPane.showMessageDialog(this, "thêm thất bại");
+        if (checkSpct()) {
+            if (sanPhamRepo.addCtSanPham(this.readCtsp1()) > 0) {
+                JOptionPane.showMessageDialog(this, "thêm thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "thêm thất bại");
+            }
+            this.fillCtsp(sanPhamRepo.getChiTietSanPham1());
         }
-        this.fillCtsp(sanPhamRepo.getChiTietSanPham1());
-       }
+        clear2();
+
     }//GEN-LAST:event_btnThemCTSPActionPerformed
 
     private void tblCTSPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTSPMouseClicked
@@ -1175,90 +1203,90 @@ public class JFrameSanPham extends javax.swing.JFrame {
     private void btnSuaThuocTinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaThuocTinhActionPerformed
         index = tblThuocTinh.getSelectedRow();
         Integer ma = Integer.parseInt(tblThuocTinh.getValueAt(index, 0).toString());
-        if(checkTT()){
+        if (checkTT()) {
             if (rdoChatLieuMat.isSelected()) {
-            if (thuocTinhRepo.updateChatLieu(this.readClMatGiay1(), ma) > 0) {
-                JOptionPane.showMessageDialog(this, "Sửa Thành công ");
-                this.fillClmg1(thuocTinhRepo.getChatLieuMatGiay1());
-            } else {
-                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
-            }
+                if (thuocTinhRepo.updateChatLieu(this.readClMatGiay1(), ma) > 0) {
+                    JOptionPane.showMessageDialog(this, "Sửa Thành công ");
+                    this.fillClmg1(thuocTinhRepo.getChatLieuMatGiay1());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                }
 
-        } else if (rdoChatLieuDe.isSelected()) {
-            if (thuocTinhRepo.updateChatLieuDe(this.readClDeGiay1(), ma) > 0) {
-                JOptionPane.showMessageDialog(this, "Sửa Thành công ");
-                this.fillCldg1(thuocTinhRepo.getChatLieuDeGiay1());
-            } else {
-                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
-            }
+            } else if (rdoChatLieuDe.isSelected()) {
+                if (thuocTinhRepo.updateChatLieuDe(this.readClDeGiay1(), ma) > 0) {
+                    JOptionPane.showMessageDialog(this, "Sửa Thành công ");
+                    this.fillCldg1(thuocTinhRepo.getChatLieuDeGiay1());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                }
 
-        } else if (rdoDanhMuc.isSelected()) {
-            if (thuocTinhRepo.updateDanhMuc(this.readDanhMuc1(), ma) > 0) {
-                JOptionPane.showMessageDialog(this, "Sửa Thành công ");
-                this.fillDanhMuc(thuocTinhRepo.getDanhMuc());
-            } else {
-                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
-            }
+            } else if (rdoDanhMuc.isSelected()) {
+                if (thuocTinhRepo.updateDanhMuc(this.readDanhMuc1(), ma) > 0) {
+                    JOptionPane.showMessageDialog(this, "Sửa Thành công ");
+                    this.fillDanhMuc(thuocTinhRepo.getDanhMuc());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                }
 
-        } else if (rdoMauSac.isSelected()) {
-            if (thuocTinhRepo.UpdateMauSac(this.readMauSac1(), ma) > 0) {
-                JOptionPane.showMessageDialog(this, "Sửa Thành công ");
-                this.fillMauSac(thuocTinhRepo.getMauSac1());
-            } else {
-                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
-            }
+            } else if (rdoMauSac.isSelected()) {
+                if (thuocTinhRepo.UpdateMauSac(this.readMauSac1(), ma) > 0) {
+                    JOptionPane.showMessageDialog(this, "Sửa Thành công ");
+                    this.fillMauSac(thuocTinhRepo.getMauSac1());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                }
 
-        } else if (rdoSize.isSelected()) {
-            if (thuocTinhRepo.UpdateSize(this.readSize1(), ma) > 0) {
-                JOptionPane.showMessageDialog(this, "Sửa Thành công ");
-                this.fillSize(thuocTinhRepo.getSize());
-            } else {
-                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
-            }
+            } else if (rdoSize.isSelected()) {
+                if (thuocTinhRepo.UpdateSize(this.readSize1(), ma) > 0) {
+                    JOptionPane.showMessageDialog(this, "Sửa Thành công ");
+                    this.fillSize(thuocTinhRepo.getSize());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                }
 
-        }
+            }
         }
 
     }//GEN-LAST:event_btnSuaThuocTinhActionPerformed
 
     private void btnThemThuocTinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemThuocTinhActionPerformed
-        if(checkTT()){
+        if (checkTT()) {
             if (rdoChatLieuDe.isSelected()) {
-            if (thuocTinhRepo.addChatLieuDe(this.readClDeGiay1()) > 0) {
-                JOptionPane.showMessageDialog(this, "Thêm Thành công ");
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
+                if (thuocTinhRepo.addChatLieuDe(this.readClDeGiay1()) > 0) {
+                    JOptionPane.showMessageDialog(this, "Thêm Thành công ");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
+                }
+                this.fillCldg1(thuocTinhRepo.getChatLieuDeGiay1());
+            } else if (rdoChatLieuMat.isSelected()) {
+                if (thuocTinhRepo.addChatLieuMat(this.readClMatGiay1()) > 0) {
+                    JOptionPane.showMessageDialog(this, "Thêm Thành công ");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
+                }
+                this.fillClmg1(thuocTinhRepo.getChatLieuMatGiay1());
+            } else if (rdoDanhMuc.isSelected()) {
+                if (thuocTinhRepo.addDanhMuc(this.readDanhMuc1()) > 0) {
+                    JOptionPane.showMessageDialog(this, "Thêm Thành công ");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
+                }
+                this.fillDanhMuc(thuocTinhRepo.getDanhMuc());
+            } else if (rdoMauSac.isSelected()) {
+                if (thuocTinhRepo.addMauSac(this.readMauSac1()) > 0) {
+                    JOptionPane.showMessageDialog(this, "Thêm Thành công ");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
+                }
+                this.fillMauSac(thuocTinhRepo.getMauSac1());
+            } else if (rdoSize.isSelected()) {
+                if (thuocTinhRepo.addSize(this.readSize1()) > 0) {
+                    JOptionPane.showMessageDialog(this, "Thêm Thành công ");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
+                }
+                this.fillSize(thuocTinhRepo.getSize());
             }
-            this.fillCldg1(thuocTinhRepo.getChatLieuDeGiay1());
-        } else if (rdoChatLieuMat.isSelected()) {
-            if (thuocTinhRepo.addChatLieuMat(this.readClMatGiay1()) > 0) {
-                JOptionPane.showMessageDialog(this, "Thêm Thành công ");
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
-            }
-            this.fillClmg1(thuocTinhRepo.getChatLieuMatGiay1());
-        } else if (rdoDanhMuc.isSelected()) {
-            if (thuocTinhRepo.addDanhMuc(this.readDanhMuc1()) > 0) {
-                JOptionPane.showMessageDialog(this, "Thêm Thành công ");
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
-            }
-            this.fillDanhMuc(thuocTinhRepo.getDanhMuc());
-        } else if (rdoMauSac.isSelected()) {
-            if (thuocTinhRepo.addMauSac(this.readMauSac1()) > 0) {
-                JOptionPane.showMessageDialog(this, "Thêm Thành công ");
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
-            }
-            this.fillMauSac(thuocTinhRepo.getMauSac1());
-        } else if (rdoSize.isSelected()) {
-            if (thuocTinhRepo.addSize(this.readSize1()) > 0) {
-                JOptionPane.showMessageDialog(this, "Thêm Thành công ");
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
-            }
-            this.fillSize(thuocTinhRepo.getSize());
-        }
         }
 
     }//GEN-LAST:event_btnThemThuocTinhActionPerformed
@@ -1619,24 +1647,24 @@ public class JFrameSanPham extends javax.swing.JFrame {
             return false;
         }
         if (rdoSize.isSelected()) {
-        // Kiểm tra tên thuộc tính có phải là số không
-        try {
-            Double.parseDouble(txtTenThuocTinh.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Tên thuộc tính phải là số khi bảng được chọn là 'size'");
-            return false;
+            // Kiểm tra tên thuộc tính có phải là số không
+            try {
+                Double.parseDouble(txtTenThuocTinh.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Tên thuộc tính phải là số khi bảng được chọn là 'size'");
+                return false;
+            }
+        } else {
+            // Kiểm tra tên thuộc tính có phải là chữ không
+            if (!txtTenThuocTinh.getText().matches("[\\p{L}\\s]+")) {
+                JOptionPane.showMessageDialog(this, "Tên thuộc tính phải là chữ");
+                return false;
+            }
         }
-    } else {
-        // Kiểm tra tên thuộc tính có phải là chữ không
-        if (!txtTenThuocTinh.getText().matches("[\\p{L}\\s]+")) {
-            JOptionPane.showMessageDialog(this, "Tên thuộc tính phải là chữ");
-            return false;
-        }
-    }
         return true;
     }
-    
-    private Boolean checkSp(){
+
+    private Boolean checkSp() {
         if (txtTenSP.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không được để trống tên Sản Phẩm");
             return false;
@@ -1645,10 +1673,29 @@ public class JFrameSanPham extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Tên Sản Phẩm phải là chữ");
             return false;
         }
+        List<SanPham1> list = sanPhamRepo.getSanPham();
+        for(SanPham1 sp : list){
+            if(txtTenSP.getText().matches(sp.getTenSP())){
+            JOptionPane.showMessageDialog(this, "Tên Sản Phẩm đã tồn tại");
+            return false;
+        }
+        }
+        return true;
+    }
+    private Boolean checkSp1() {
+        if (txtTenSP.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không được để trống tên Sản Phẩm");
+            return false;
+        }
+        if (!txtTenSP.getText().matches("[\\p{L}\\s]+")) {
+            JOptionPane.showMessageDialog(this, "Tên Sản Phẩm phải là chữ");
+            return false;
+        }
+       
         return true;
     }
 
-    private Boolean checkSpct(){
+    private Boolean checkSpct() {
         try {
             int soLuong = Integer.parseInt(txtSoLuong.getText());
             if (soLuong <= 0) {
@@ -1659,7 +1706,7 @@ public class JFrameSanPham extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Số lượng phải là số nguyên hợp lệ");
             return false;
         }
-         try {
+        try {
             double Gia = Double.parseDouble(txtDonGia.getText());
             if (Gia <= 0) {
                 JOptionPane.showMessageDialog(this, "Đơn giá phải là số lớn hơn 0");
@@ -1675,6 +1722,7 @@ public class JFrameSanPham extends javax.swing.JFrame {
         }
         return true;
     }
+
     /**
      * @param args the command line arguments
      */

@@ -26,18 +26,21 @@ public class JFrameNhanVien extends javax.swing.JFrame {
     /**
      * Creates new form JFrameQuanLyVoucher
      */
-    
     private DefaultTableModel dtm = new DefaultTableModel();
 
     private NhanVienRepository nhanVienRepository;
-    
+
     public JFrameNhanVien() throws SQLServerException {
         initComponents();
         setLocationRelativeTo(null);
         this.nhanVienRepository = new NhanVienRepository();
         loadTable();
     }
-    
+
+    private String maskPassword(String password) {
+        return "*".repeat(password.length());
+    }
+
     public void loadTable() throws SQLServerException {
         NhanVienRepository nhanVienRepository = new NhanVienRepository();
 
@@ -46,10 +49,13 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 
         for (NhanVien nhanVien : nhanVienRepository.getAllNhanViens()) {
 
+            String maskedPassword = maskPassword(nhanVien.getMatKhau());
+
             Object[] rowData = new Object[]{
                 nhanVien.getMaNv(),
                 nhanVien.getTenDangNhap(),
-                nhanVien.getMatKhau(),
+                //                nhanVien.getMatKhau(),
+                maskedPassword,
                 nhanVien.getHoTen(),
                 nhanVien.getGioiTinh() == 1 ? "Nam" : "Nữ",
                 nhanVien.getDienThoai(),
@@ -61,7 +67,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             dtm.addRow(rowData);
         }
     }
-    
+
     public void mouseClick() {
         NhanVien nv = new NhanVien();
         int row = tblNhanVien.getSelectedRow();
@@ -83,16 +89,6 @@ public class JFrameNhanVien extends javax.swing.JFrame {
         cboChucVu.setSelectedItem(tblNhanVien.getValueAt(row, 8).toString());
         cboTrangThaiNV.setSelectedItem(tblNhanVien.getValueAt(row, 9).toString());
     }
-    
-    void ShowPass(){
-        int row = tblNhanVien.getSelectedRow();
-        if (row < 0) {
-            return;
-        }
-        
-        
-    }
-    
 
     public void clearForm() {
         txtMaNV.setText("");
@@ -374,7 +370,6 @@ public class JFrameNhanVien extends javax.swing.JFrame {
         btnUpdateNhanVien4 = new javax.swing.JButton();
         btnXoaNhanVien2 = new javax.swing.JButton();
         btnClearForm2 = new javax.swing.JButton();
-        btnUpdateNhanVien5 = new javax.swing.JButton();
         txtMaNV = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtTenDangNhap = new javax.swing.JTextField();
@@ -538,16 +533,6 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             }
         });
 
-        btnUpdateNhanVien5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnUpdateNhanVien5.setForeground(new java.awt.Color(0, 204, 0));
-        btnUpdateNhanVien5.setText("Cập nhật TT");
-        btnUpdateNhanVien5.setBorder(new javax.swing.border.MatteBorder(null));
-        btnUpdateNhanVien5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateNhanVien5ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jpnCRUD4Layout = new javax.swing.GroupLayout(jpnCRUD4);
         jpnCRUD4.setLayout(jpnCRUD4Layout);
         jpnCRUD4Layout.setHorizontalGroup(
@@ -555,7 +540,6 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             .addGroup(jpnCRUD4Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnUpdateNhanVien5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClearForm2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnXoaNhanVien2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdateNhanVien4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -568,9 +552,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
                 .addComponent(btnThemNhanVien2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnUpdateNhanVien4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(btnUpdateNhanVien5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addComponent(btnXoaNhanVien2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnClearForm2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -782,26 +764,23 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 
     private void btnXoaNhanVien2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaNhanVien2ActionPerformed
         try {
-            deleteNhanVien();
+            //        try {
+//            deleteNhanVien();
+//        } catch (SQLServerException ex) {
+//            Logger.getLogger(JFrameNhanVien.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+            updateTrangThaiNhanVien();
         } catch (SQLServerException ex) {
             Logger.getLogger(JFrameNhanVien.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnXoaNhanVien2ActionPerformed
 
     private void btnClearForm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearForm2ActionPerformed
-       clearForm();
+        clearForm();
     }//GEN-LAST:event_btnClearForm2ActionPerformed
 
-    private void btnUpdateNhanVien5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateNhanVien5ActionPerformed
-        try {
-            updateTrangThaiNhanVien();
-        } catch (SQLServerException ex) {
-            Logger.getLogger(JFrameNhanVien.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnUpdateNhanVien5ActionPerformed
-
     private void tblNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNhanVienMouseClicked
-       mouseClick();
+        mouseClick();
     }//GEN-LAST:event_tblNhanVienMouseClicked
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
@@ -865,23 +844,12 @@ public class JFrameNhanVien extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClearForm;
-    private javax.swing.JButton btnClearForm1;
     private javax.swing.JButton btnClearForm2;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnQLNhanVien;
-    private javax.swing.JButton btnThemNhanVien;
-    private javax.swing.JButton btnThemNhanVien1;
     private javax.swing.JButton btnThemNhanVien2;
     private javax.swing.JButton btnTimKiem;
-    private javax.swing.JButton btnUpdateNhanVien;
-    private javax.swing.JButton btnUpdateNhanVien1;
-    private javax.swing.JButton btnUpdateNhanVien2;
-    private javax.swing.JButton btnUpdateNhanVien3;
     private javax.swing.JButton btnUpdateNhanVien4;
-    private javax.swing.JButton btnUpdateNhanVien5;
-    private javax.swing.JButton btnXoaNhanVien;
-    private javax.swing.JButton btnXoaNhanVien1;
     private javax.swing.JButton btnXoaNhanVien2;
     private javax.swing.JComboBox<String> cboChucVu;
     private javax.swing.JComboBox<String> cboTrangThaiNV;
@@ -901,8 +869,6 @@ public class JFrameNhanVien extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel jpnCRUD2;
-    private javax.swing.JPanel jpnCRUD3;
     private javax.swing.JPanel jpnCRUD4;
     private javax.swing.JPanel jpnNavigation;
     private javax.swing.JRadioButton rdoNam;
