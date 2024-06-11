@@ -8,7 +8,6 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import repository.Auth;
-import repository.MsgBox;
 
 /**
  *
@@ -31,11 +30,11 @@ public class JFrameMain extends javax.swing.JFrame {
             btnSanPham.setVisible(false);
 
         }
-        phanQuyen();
+        hienThiTen();
 
     }
 
-    void phanQuyen() {
+    void hienThiTen() {
         String ten = Auth.User.getHoTen();
         int chucvu = Auth.User.getChucVu();
 //        ?"Admin":"Nhân viên"
@@ -367,7 +366,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMatKhauActionPerformed
         setVisible(false);
-        new DoiMatKhauJdialog(this, rootPaneCheckingEnabled).setVisible(true);
+        new JFrameDoiMatKhau().setVisible(true);
     }//GEN-LAST:event_btnDoiMatKhauActionPerformed
 
     /**

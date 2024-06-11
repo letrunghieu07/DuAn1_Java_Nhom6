@@ -1669,7 +1669,7 @@ public class JFrameSanPham extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Không được để trống tên Sản Phẩm");
             return false;
         }
-        if (!txtTenSP.getText().matches("[\\p{L}\\s]+")) {
+        if (!txtTenSP.getText().matches("[\\p{L}0-9\\s]+")) {
             JOptionPane.showMessageDialog(this, "Tên Sản Phẩm phải là chữ");
             return false;
         }
@@ -1687,7 +1687,7 @@ public class JFrameSanPham extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Không được để trống tên Sản Phẩm");
             return false;
         }
-        if (!txtTenSP.getText().matches("[\\p{L}\\s]+")) {
+        if (!txtTenSP.getText().matches("[\\p{L}0-9\\s]+")) {
             JOptionPane.showMessageDialog(this, "Tên Sản Phẩm phải là chữ");
             return false;
         }
@@ -1712,8 +1712,8 @@ public class JFrameSanPham extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Đơn giá phải là số lớn hơn 0");
                 return false;
             }
-            if (Gia > 50000000) {
-                JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 50,000,000");
+            if (Gia > 100000000) {
+                JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 100,000,000");
                 return false;
             }
         } catch (NumberFormatException e) {

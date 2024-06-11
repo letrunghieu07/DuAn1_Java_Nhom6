@@ -54,7 +54,6 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             Object[] rowData = new Object[]{
                 nhanVien.getMaNv(),
                 nhanVien.getTenDangNhap(),
-                //                nhanVien.getMatKhau(),
                 maskedPassword,
                 nhanVien.getHoTen(),
                 nhanVien.getGioiTinh() == 1 ? "Nam" : "Nữ",
@@ -251,7 +250,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             if (check != JOptionPane.YES_OPTION) {
                 return;
             }
-            NhanVien nhanVien = getDataNhanVien1();
+            NhanVien nhanVien = getDataNhanVien();
             nhanVienRepository.addNhanVien(nhanVien);
 
             loadTable();
@@ -272,7 +271,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
                 return;
             }
 
-            NhanVien nhanVien = getDataNhanVien();
+            NhanVien nhanVien = getDataNhanVien1();
             int selectedRow = tblNhanVien.getSelectedRow();
             if (selectedRow == -1) {
                 JOptionPane.showMessageDialog(this, "Chọn một dòng để cập nhật");
@@ -516,7 +515,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 
         btnXoaNhanVien2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnXoaNhanVien2.setForeground(new java.awt.Color(255, 0, 0));
-        btnXoaNhanVien2.setText("Xoá");
+        btnXoaNhanVien2.setText("Cập nhật TT");
         btnXoaNhanVien2.setBorder(new javax.swing.border.MatteBorder(null));
         btnXoaNhanVien2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -769,7 +768,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 //        } catch (SQLServerException ex) {
 //            Logger.getLogger(JFrameNhanVien.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-            updateTrangThaiNhanVien();
+            deleteNhanVien();
         } catch (SQLServerException ex) {
             Logger.getLogger(JFrameNhanVien.class.getName()).log(Level.SEVERE, null, ex);
         }

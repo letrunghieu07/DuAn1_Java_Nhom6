@@ -7,9 +7,9 @@ package views;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.NhanVien;
 import repository.Auth;
-import repository.MsgBox;
 import repository.NhanVienRepository;
 
 /**
@@ -35,11 +35,11 @@ public class JFrameLoginForm extends javax.swing.JFrame {
         String matKhau = new String(txtMatKhau.getPassword());
         NhanVien nv = nhanVienRepository.getNhanVienByTenDangNhap(tenDangNhap);
         if (nv == null) {
-            MsgBox.alert(this, "Sai tên đăng nhập!");
+             JOptionPane.showMessageDialog(this, "Sai tên đăng nhập!");
         } else if (!matKhau.equals(nv.getMatKhau())) {
-            MsgBox.alert(this, "Sai mật khẩu!");
+            JOptionPane.showMessageDialog(this, "Sai mật khẩu!");
         } else if (nv.getTrangThai() == 1) {
-            MsgBox.alert(this, "Tài khoản của bạn đã bị khóa!");
+             JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã bị khóa!");
         } else {
             Auth.User = nv;
             JFrameMain frameMain = new JFrameMain();
@@ -209,8 +209,6 @@ public class JFrameLoginForm extends javax.swing.JFrame {
 
     private void jlbQuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlbQuenMatKhauMouseClicked
         // TODO add your handling code here:
-
-
     }//GEN-LAST:event_jlbQuenMatKhauMouseClicked
 
     /**

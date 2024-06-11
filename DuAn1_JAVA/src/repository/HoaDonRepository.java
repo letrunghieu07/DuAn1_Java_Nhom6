@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import model.HoaDonChiTietq;
 
-
 import model.hoaDon;
 import utilities.JdbcHelper;
 
 public class HoaDonRepository {
 
-   //load hoa don chờ
+    //load hoa don chờ
     public ArrayList<hoaDon> getHoaDonCho(int trangThai) {
         ArrayList<hoaDon> listHDCho = new ArrayList<>();
         String query = """
@@ -47,51 +46,54 @@ public class HoaDonRepository {
         }
 
     }
-    
-     public List<HoaDonChiTietq> timKiemHoaDonBangMa(int maHD) {
+
+    public List<HoaDonChiTietq> timKiemHoaDonBangMa(int maHD) {
         List<HoaDonChiTietq> danhSachHoaDon = new ArrayList<>();
         try {
             JdbcHelper.getConnection();
             Connection con = JdbcHelper.getConnection();
 
-            String sql = "SELECT \n"
-                    + "    HDCT.MaHDCT, \n"
-                    + "    HD.MaHD, \n"
-                    + "    HDCT.MaCTSP, \n"
-                    + "    NV.HoTen AS HoTenNV, \n"
-                    + "    TTKH.TenKH, \n"
-                    + "    SP.TenSP, \n"
-                    + "    HDCT.SoLuong, \n"
-                    + "    HDCT.DonGia, \n"
-                    + "    CLDe.TenChatLieuDe, \n"
-                    + "    SIZE.KichThuoc, \n"
-                    + "    MS.TenMau, \n"
-                    + "    HD.TongTien, \n"
-                    + "    KM.MucGiam, \n"
-                    + "    HDM.SoTienConLai\n"
-                    + "FROM \n"
-                    + "    HOA_DON_CHI_TIET HDCT\n"
-                    + "LEFT JOIN \n"
-                    + "    HOA_DON HD ON HDCT.MaHD = HD.MaHD\n"
-                    + "LEFT JOIN \n"
-                    + "    SAN_PHAM SP ON HDCT.MaCTSP = SP.MaSP\n"
-                    + "LEFT JOIN \n"
-                    + "    CHI_TIET_SAN_PHAM CTSP ON HDCT.MaCTSP = CTSP.MaCTSP\n"
-                    + "LEFT JOIN\n"
-                    + "    NHAN_VIEN NV ON HD.MaNV = NV.MaNV\n"
-                    + "LEFT JOIN \n"
-                    + "    THONG_TIN_KH TTKH ON HD.MaTTKH = TTKH.MaTTKH\n"
-                    + "LEFT JOIN \n"
-                    + "    CHAT_LIEU_DE_GIAY CLDe ON CTSP.MaCLDe = CLDe.MaCLDe\n"
-                    + "LEFT JOIN \n"
-                    + "    SIZE ON CTSP.MaSize = SIZE.MaSize\n"
-                    + "LEFT JOIN \n"
-                    + "    MAU_SAC MS ON CTSP.MaMS = MS.MaMS\n"
-                    + "LEFT JOIN\n"
-                    + "    HOA_DON_KHUYEN_MAI HDM ON HD.MaHD = HDM.MaHD\n"
-                    + "LEFT JOIN \n"
-                    + "    KHUYEN_MAI KM ON HDM.MaKM = KM.MaKM\n"
-                    + "where HD.MAHD=?";
+            String sql = """
+            SELECT 
+                HDCT.MaHDCT, 
+                HD.MaHD, 
+                HDCT.MaCTSP, 
+                NV.HoTen AS HoTenNV, 
+                TTKH.TenKH, 
+                SP.TenSP, 
+                HDCT.SoLuong, 
+                HDCT.DonGia, 
+                CLDe.TenChatLieuDe, 
+                SIZE.KichThuoc, 
+                MS.TenMau, 
+                HD.TongTien, 
+                KM.MucGiam, 
+                HDKM.SoTienConLai
+            FROM 
+                HOA_DON_CHI_TIET HDCT
+            LEFT JOIN 
+                HOA_DON HD ON HDCT.MaHD = HD.MaHD
+            LEFT JOIN 
+                SAN_PHAM SP ON HDCT.MaCTSP = SP.MaSP
+            LEFT JOIN 
+                CHI_TIET_SAN_PHAM CTSP ON HDCT.MaCTSP = CTSP.MaCTSP
+            LEFT JOIN
+                NHAN_VIEN NV ON HD.MaNV = NV.MaNV
+            LEFT JOIN 
+                THONG_TIN_KH TTKH ON HD.MaTTKH = TTKH.MaTTKH
+            LEFT JOIN 
+                CHAT_LIEU_DE_GIAY CLDe ON CTSP.MaCLDe = CLDe.MaCLDe
+            LEFT JOIN 
+                SIZE ON CTSP.MaSize = SIZE.MaSize
+            LEFT JOIN 
+                MAU_SAC MS ON CTSP.MaMS = MS.MaMS
+            LEFT JOIN
+                HOA_DON_KHUYEN_MAI HDKM ON HD.MaHD = HDKM.MaHD
+            LEFT JOIN 
+                KHUYEN_MAI KM ON HDKM.MaKM = KM.MaKM
+            WHERE HD.MAHD=?
+            """;
+
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, maHD);
             ResultSet rs = statement.executeQuery();
@@ -121,5 +123,5 @@ public class HoaDonRepository {
         }
         return danhSachHoaDon;
     }
-        
+
 }

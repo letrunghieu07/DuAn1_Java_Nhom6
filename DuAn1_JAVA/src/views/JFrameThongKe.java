@@ -4,18 +4,59 @@
  */
 package views;
 
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import model.hoaDon;
+import repository.HoaDonRepository;
+import repository.ThongKeRepository;
+
 /**
  *
  * @author trung
  */
 public class JFrameThongKe extends javax.swing.JFrame {
 
+    private ThongKeRepository thongKeRepository;
+
     /**
      * Creates new form JFrameQuanLyVoucher
      */
     public JFrameThongKe() {
         initComponents();
+        this.thongKeRepository = new ThongKeRepository();
+
         setLocationRelativeTo(null);
+        fillDSHDCho();
+        thongKe();
+    }
+
+    // Fill hóa đơn chờ
+    void fillDSHDCho() {
+        System.out.println("abc");
+        int trangThai = 1;
+
+        ArrayList<hoaDon> listHD = thongKeRepository.getHoaDonCho(trangThai);
+
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
+
+        for (hoaDon hd : listHD) {
+            Object[] data = {
+                hd.getMaHD(),
+                hd.getTenNV(),
+                hd.getNgayTao(),
+                hd.getTrangThai() ? "Đã thanh toán" : "Chưa thanh toán"
+            };
+            model.addRow(data);
+        }
+    }
+
+    void thongKe() {
+        this.lblTongHoaDon.setText(String.valueOf(thongKeRepository.tongHoaDon()));
+        this.lblDaThanhToan.setText(String.valueOf(thongKeRepository.daThanhToan()));
+        this.lblHoaDonCho.setText(String.valueOf(thongKeRepository.hoaDonCho()));
+        this.lblTongDoanhThu.setText(String.valueOf(thongKeRepository.sumTotal()));
+        this.lblSpdaban.setText(String.valueOf(thongKeRepository.tongSanPhamDaBan()));
     }
 
     /**
@@ -39,7 +80,7 @@ public class JFrameThongKe extends javax.swing.JFrame {
         jPanel23 = new javax.swing.JPanel();
         jPanel28 = new javax.swing.JPanel();
         a3 = new javax.swing.JLabel();
-        lblTongHoaDon3 = new javax.swing.JLabel();
+        lblTongHoaDon = new javax.swing.JLabel();
         jPanel30 = new javax.swing.JPanel();
         h = new javax.swing.JLabel();
         lblDaThanhToan = new javax.swing.JLabel();
@@ -48,12 +89,14 @@ public class JFrameThongKe extends javax.swing.JFrame {
         lblHoaDonCho = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
-        lbDtAll = new javax.swing.JLabel();
+        lblTongDoanhThu = new javax.swing.JLabel();
         lblTongSpDaBan1 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
-        lblSpdaban1 = new javax.swing.JLabel();
+        lblSpdaban = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblHoaDon = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,7 +189,7 @@ public class JFrameThongKe extends javax.swing.JFrame {
 
         jPanel23.setBackground(new java.awt.Color(222, 231, 227));
         jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder("Thống kê"));
-        jPanel23.setLayout(new java.awt.GridLayout());
+        jPanel23.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel28.setBackground(new java.awt.Color(245, 147, 137));
         jPanel28.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -156,9 +199,9 @@ public class JFrameThongKe extends javax.swing.JFrame {
         a3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         a3.setText("Tổng số  hóa đơn");
 
-        lblTongHoaDon3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        lblTongHoaDon3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTongHoaDon3.setText("0");
+        lblTongHoaDon.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblTongHoaDon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTongHoaDon.setText("0");
 
         javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
         jPanel28.setLayout(jPanel28Layout);
@@ -168,13 +211,13 @@ public class JFrameThongKe extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(a3, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(lblTongHoaDon3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblTongHoaDon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel28Layout.setVerticalGroup(
             jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel28Layout.createSequentialGroup()
                 .addContainerGap(33, Short.MAX_VALUE)
-                .addComponent(lblTongHoaDon3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblTongHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(a3)
                 .addContainerGap())
@@ -255,9 +298,9 @@ public class JFrameThongKe extends javax.swing.JFrame {
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel24.setText("Tổng doanh thu ");
 
-        lbDtAll.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        lbDtAll.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbDtAll.setText("0");
+        lblTongDoanhThu.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblTongDoanhThu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTongDoanhThu.setText("0");
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
@@ -267,14 +310,14 @@ public class JFrameThongKe extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addComponent(lbDtAll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                    .addComponent(lblTongDoanhThu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                 .addContainerGap(36, Short.MAX_VALUE)
-                .addComponent(lbDtAll, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblTongDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel24)
                 .addContainerGap())
@@ -289,9 +332,9 @@ public class JFrameThongKe extends javax.swing.JFrame {
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText("Tổng số lượng SP đã bán");
 
-        lblSpdaban1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        lblSpdaban1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSpdaban1.setText("0");
+        lblSpdaban.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblSpdaban.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSpdaban.setText("0");
 
         javax.swing.GroupLayout lblTongSpDaBan1Layout = new javax.swing.GroupLayout(lblTongSpDaBan1);
         lblTongSpDaBan1.setLayout(lblTongSpDaBan1Layout);
@@ -301,13 +344,13 @@ public class JFrameThongKe extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(lblSpdaban1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblSpdaban, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         lblTongSpDaBan1Layout.setVerticalGroup(
             lblTongSpDaBan1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblTongSpDaBan1Layout.createSequentialGroup()
                 .addContainerGap(36, Short.MAX_VALUE)
-                .addComponent(lblSpdaban1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblSpdaban, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel20)
                 .addContainerGap())
@@ -319,15 +362,34 @@ public class JFrameThongKe extends javax.swing.JFrame {
 
         jPanel15.setBackground(new java.awt.Color(204, 255, 204));
 
+        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Mã HD", "Họ tên", "Ngày Tạo", "Trạng thái"
+            }
+        ));
+        jScrollPane1.setViewportView(tblHoaDon);
+
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 969, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 359, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                .addContainerGap(82, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -478,14 +540,16 @@ public class JFrameThongKe extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JPanel jpnNavigation;
-    private javax.swing.JLabel lbDtAll;
     private javax.swing.JLabel lblDaThanhToan;
     private javax.swing.JLabel lblHoaDonCho;
-    private javax.swing.JLabel lblSpdaban1;
-    private javax.swing.JLabel lblTongHoaDon3;
+    private javax.swing.JLabel lblSpdaban;
+    private javax.swing.JLabel lblTongDoanhThu;
+    private javax.swing.JLabel lblTongHoaDon;
     private javax.swing.JPanel lblTongSpDaBan1;
     private javax.swing.JLabel s;
+    private javax.swing.JTable tblHoaDon;
     // End of variables declaration//GEN-END:variables
 }

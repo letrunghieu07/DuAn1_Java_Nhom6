@@ -4,14 +4,19 @@
  */
 package views;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import model.HoaDonChiTietq;
-import model.HoaDonq;
 import model.hoaDon;
 import repository.BanHangRepository;
 import repository.HoaDonRepository;
@@ -22,46 +27,39 @@ import repository.HoaDonRepository;
  */
 public class JFrameHoaDon extends javax.swing.JFrame {
 
-    private HoaDonRepository hoaDonRepository ;
-//    private final HoaDonChiTietDAO hoaDonChiTietDAO;
-    private DefaultTableModel modelTable = new DefaultTableModel();
-    private DefaultTableModel modelTable2 = new DefaultTableModel();
-    
-     BanHangRepository banHangRepository = new BanHangRepository();
+    private HoaDonRepository hoaDonRepository;
+
     /**
      * Creates new form JFrameBanHang
      */
     public JFrameHoaDon() {
-        
+
         this.hoaDonRepository = new HoaDonRepository();
         initComponents();
         setLocationRelativeTo(null);
 //        loadTableHoaDon();
         fillDSHDCho();
-         tblHoaDon.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
+        mouseClick();
 
-                if (!e.getValueIsAdjusting()) {
-                    int selectedRow = tblHoaDon.getSelectedRow();
-                    if (selectedRow != -1) {
-                        // Lấy mã hóa đơn từ dòng được chọn trong jTable1
-                        int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
-                        // Hiển thị chi tiết hóa đơn trong jTable2
-                        hienThiChiTietHoaDon(maHD);
-                    }
+    }
+
+    void mouseClick() {
+        tblHoaDon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = tblHoaDon.getSelectedRow();
+                if (selectedRow != -1) {
+                    int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
+                    fillHoaDonChiTiet(maHD); 
                 }
             }
         });
     }
-    
-   
-    
-      // Fill hóa đơn chờ
+
+    // Fill hóa đơn chờ
     void fillDSHDCho() {
         System.out.println("abc");
         int trangThai = 1;
-        
 
         ArrayList<hoaDon> listHD = hoaDonRepository.getHoaDonCho(trangThai);
 
@@ -78,10 +76,11 @@ public class JFrameHoaDon extends javax.swing.JFrame {
             model.addRow(data);
         }
     }
-    
-     public void hienThiChiTietHoaDon(int maHD) {
-        modelTable2 = (DefaultTableModel) tblChiTietHoaDon.getModel();
 
+    // Fill hóa đon chi tiết
+    public void fillHoaDonChiTiet(int maHD) {
+
+        DefaultTableModel modelTable2 = (DefaultTableModel) tblChiTietHoaDon.getModel();
         modelTable2.setRowCount(0); // Xóa dữ liệu cũ trước khi hiển thị dữ liệu mới
 
         List<HoaDonChiTietq> chiTietList = this.hoaDonRepository.timKiemHoaDonBangMa(maHD);
@@ -105,7 +104,6 @@ public class JFrameHoaDon extends javax.swing.JFrame {
         }
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -129,7 +127,7 @@ public class JFrameHoaDon extends javax.swing.JFrame {
         tblChiTietHoaDon = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         txtTimKiem = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        btnTimKiem = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -259,7 +257,12 @@ public class JFrameHoaDon extends javax.swing.JFrame {
 
         jLabel3.setText("Tim kiem");
 
-        jButton4.setText("Tìm kiếm");
+        btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("In hóa đơn");
 
@@ -273,7 +276,7 @@ public class JFrameHoaDon extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(btnTimKiem)
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -296,7 +299,7 @@ public class JFrameHoaDon extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4)
+                    .addComponent(btnTimKiem)
                     .addComponent(jButton5))
                 .addGap(7, 7, 7))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,6 +351,17 @@ public class JFrameHoaDon extends javax.swing.JFrame {
         new JFrameHoaDon().setVisible(true);
     }//GEN-LAST:event_btnHoaDonActionPerformed
 
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        TableRowSorter<DefaultTableModel> obj = new TableRowSorter<>(model);
+        tblHoaDon.setRowSorter(obj);
+        obj.setRowFilter(RowFilter.regexFilter(txtTimKiem.getText()));
+        if (txtTimKiem.getText() == null) {
+            fillDSHDCho();
+        }
+    }//GEN-LAST:event_btnTimKiemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -394,8 +408,8 @@ public class JFrameHoaDon extends javax.swing.JFrame {
     private javax.swing.JButton btnBanHang;
     private javax.swing.JButton btnHoaDon;
     private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

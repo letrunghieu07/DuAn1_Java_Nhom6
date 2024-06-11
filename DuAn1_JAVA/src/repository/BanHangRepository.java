@@ -188,7 +188,7 @@ public class BanHangRepository {
             stmt.execute();
             return true;
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }

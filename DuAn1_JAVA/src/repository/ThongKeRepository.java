@@ -7,6 +7,7 @@ package repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import model.hoaDon;
 import utilities.JdbcHelper;
@@ -16,8 +17,8 @@ import utilities.JdbcHelper;
  * @author trung
  */
 public class ThongKeRepository {
-    
-     //load hoa don chờ
+
+    //load hoa don chờ
     public ArrayList<hoaDon> getHoaDonCho(int trangThai) {
         ArrayList<hoaDon> listHDCho = new ArrayList<>();
         String query = """
@@ -50,4 +51,115 @@ public class ThongKeRepository {
         }
 
     }
+
+    // fill tổng số hóa đơn
+    public int tongHoaDon() {
+        int totalInvoices = 0;
+        String sql = "SELECT COUNT(*) AS tongHoaDon FROM HOA_DON";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                totalInvoices = rs.getInt("tongHoaDon");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return totalInvoices;
+    }
+
+    // Đã thanh toán
+    public int daThanhToan() {
+        int totalPaidInvoices = 0;
+        String sql = "SELECT COUNT(*) AS tongHoaDon FROM HOA_DON WHERE TrangThai = 1";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalPaidInvoices = rs.getInt("tongHoaDon");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return totalPaidInvoices;
+    }
+
+    // Hoad đơn chờ
+    public int hoaDonCho() {
+        int totalUnpaidInvoices = 0;
+        String sql = "SELECT COUNT(*) AS tongHoaDon FROM HOA_DON WHERE TrangThai = 0";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                totalUnpaidInvoices = rs.getInt("tongHoaDon");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return totalUnpaidInvoices;
+    }
+
+    // Tổng doanh thu
+    public Float sumTotal() {
+        Float total = 0.0f;
+        String sql = "SELECT SUM(TongTien) AS total_sum FROM HOA_DON WHERE TrangThai = 1;";
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getFloat("total_sum");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return total;
+    }
+    
+    
+    // Tổng sp đã bán
+    public int tongSanPhamDaBan() {
+        int totalQuantity = 0;
+        String sql = "SELECT SUM(SoLuong) AS TongSoLuong FROM HOA_DON_CHI_TIET "
+                + "JOIN HOA_DON ON HOA_DON_CHI_TIET.MaHD = HOA_DON.MaHD "
+                + "WHERE HOA_DON.TrangThai = 1";
+
+        try {
+            Connection conn = JdbcHelper.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                totalQuantity = resultSet.getInt("TongSoLuong");
+            }
+
+         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return totalQuantity;
+    }
+
 }

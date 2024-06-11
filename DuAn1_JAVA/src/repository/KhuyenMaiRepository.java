@@ -107,4 +107,21 @@ public class KhuyenMaiRepository {
         }
     }
     
+     public boolean kiemTraMaApDung(String maApDung) {
+    String query = "SELECT COUNT(*) FROM KHUYEN_MAI WHERE MaGiam = ?";
+    try {
+        Connection conn = JdbcHelper.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, maApDung);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            int count = rs.getInt(1);
+            return count > 0;
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return false;
+}
+    
 }

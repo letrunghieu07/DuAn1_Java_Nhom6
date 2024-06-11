@@ -663,8 +663,8 @@ try {
             return;
         }
 
-        Date ngayBatDau = new SimpleDateFormat("yyyy-MM-dd").parse(ngayBatDauStr);
-        Date ngayKetThuc = new SimpleDateFormat("yyyy-MM-dd").parse(ngayKetThucStr);
+        Date ngayBatDau = new SimpleDateFormat("dd-MM-yyyy").parse(ngayBatDauStr);
+        Date ngayKetThuc = new SimpleDateFormat("dd-MM-yyyy").parse(ngayKetThucStr);
         java.sql.Date ngayBatDauSql = new java.sql.Date(ngayBatDau.getTime());
         java.sql.Date ngayKetThucSql = new java.sql.Date(ngayKetThuc.getTime());
 
@@ -688,6 +688,11 @@ try {
         }
         if (maApDung.length() != 5) {
             JOptionPane.showMessageDialog(this, "Mã áp dụng phải có 5 ký tự!");
+            return;
+        }
+               KhuyenMaiRepository repo = new KhuyenMaiRepository();
+        if (repo.kiemTraMaApDung(maApDung)) {
+            JOptionPane.showMessageDialog(this, "Mã áp dụng đã tồn tại. Vui lòng nhập mã khác!");
             return;
         }
         if (trangThai == 0) {

@@ -10,14 +10,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.KhachHang;
 import repository.Auth;
-import repository.MsgBox;
 import repository.KhachHangService;
 
 public class JFrameKhacHang extends javax.swing.JFrame {
@@ -569,7 +567,7 @@ public class JFrameKhacHang extends javax.swing.JFrame {
             }
 
         } else {
-            MsgBox.alert(this, "Bạn không được phép xóa");
+             JOptionPane.showMessageDialog(this, "Bạn không được phép xóa");
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
