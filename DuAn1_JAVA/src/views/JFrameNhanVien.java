@@ -271,7 +271,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
                 return;
             }
 
-            NhanVien nhanVien = getDataNhanVien1();
+            NhanVien nhanVien = getDataNhanVien();
             int selectedRow = tblNhanVien.getSelectedRow();
             if (selectedRow == -1) {
                 JOptionPane.showMessageDialog(this, "Chọn một dòng để cập nhật");
@@ -768,7 +768,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 //        } catch (SQLServerException ex) {
 //            Logger.getLogger(JFrameNhanVien.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-            deleteNhanVien();
+            updateTrangThaiNhanVien();
         } catch (SQLServerException ex) {
             Logger.getLogger(JFrameNhanVien.class.getName()).log(Level.SEVERE, null, ex);
         }
