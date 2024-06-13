@@ -57,7 +57,17 @@ public class ChatLieuDeGiay1 {
         return TenChatLieuDe;
     }
     
+    public String getTrangThai(){
+        String trangThai;
+        if(this.isTrangThai()){
+            trangThai = "Đang kinh doanh";
+        }else{
+            trangThai = "Ngừng kinh doanh";
+        }
+        return trangThai;
+    }
+    
     public Object[] dataCldg1(){
-        return new Object[]{this.MaCLDe,this.TenChatLieuDe,this.TrangThai};
+        return new Object[]{this.MaCLDe,this.TenChatLieuDe,this.getTrangThai()};
     }
 }

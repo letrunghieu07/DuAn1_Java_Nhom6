@@ -93,7 +93,17 @@ public class Size1 {
 //        this.KichThuoc = KichThuoc;
 //    }
     
+     public String getTrangThai(){
+        String trangThai;
+        if(this.isTrangThai()){
+            trangThai = "Đang kinh doanh";
+        }else{
+            trangThai = "Ngừng kinh doanh";
+        }
+        return trangThai;
+    }
+    
     public Object[] dataSize(){
-        return new Object[]{this.MaSize,this.KichThuoc,this.TrangThai};
+        return new Object[]{this.MaSize,this.KichThuoc,this.getTrangThai()};
     }
 }

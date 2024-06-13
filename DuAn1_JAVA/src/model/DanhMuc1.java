@@ -60,8 +60,18 @@ public class DanhMuc1 {
         return TenDanhMuc;
     }
     
+     public String getTrangThai(){
+        String trangThai;
+        if(this.isTrangThai()){
+            trangThai = "Đang kinh doanh";
+        }else{
+            trangThai = "Ngừng kinh doanh";
+        }
+        return trangThai;
+    }
+    
     public Object[] dataDanhMuc(){
-        return new Object[]{this.MaDM,this.TenDanhMuc,this.TrangThai};
+        return new Object[]{this.MaDM,this.TenDanhMuc,this.getTrangThai()};
     }
     
     

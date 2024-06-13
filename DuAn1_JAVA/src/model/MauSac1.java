@@ -57,8 +57,18 @@ public class MauSac1 {
     public String toString() {
         return TenMau;
     }
+    
+     public String getTrangThai(){
+        String trangThai;
+        if(this.isTrangThai()){
+            trangThai = "Đang kinh doanh";
+        }else{
+            trangThai = "Ngừng kinh doanh";
+        }
+        return trangThai;
+    }
 
     public Object[] dataMauSac(){
-        return new Object[]{this.MaMS,this.TenMau,this.TrangThai};
+        return new Object[]{this.MaMS,this.TenMau,this.getTrangThai()};
     }
 }
