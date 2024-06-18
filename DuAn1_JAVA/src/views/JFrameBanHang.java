@@ -564,89 +564,6 @@ public class JFrameBanHang extends javax.swing.JFrame {
 
     }
 
-//    void updateHoaDon(boolean trangThai, String message) {
-//        ArrayList<KhachHang> listkh = banHangRepository.getKhachHang();
-//        if (tblGioHang.getRowCount() <= 0) {
-//            JOptionPane.showMessageDialog(this, "Thanh toán thất bại: \n Hóa đơn trống");
-//            return;
-//        }
-//        LocalDateTime ldt = LocalDateTime.now();
-//        String dateNow = (DateTimeFormatter.ofPattern("MM-dd-yyyy", Locale.ENGLISH).format(ldt));
-//        String ngayTao = dateNow;
-//        String sdt = txtSDTKhach.getText();
-//        String tienThua = lblTienThua.getText();
-//        if (tienThua.isEmpty()) {
-//             JOptionPane.showMessageDialog(this, "Chưa đủ tiền thanh toán");
-//            return;
-//        }
-//
-//        int rowSelected = tblHoaDon.getSelectedRow();
-//        if (rowSelected < 0) {
-//             JOptionPane.showMessageDialog(this, "Chưa chọn hóa đơn thao tác");
-//            return;
-//        }
-//        int maHD = (int) tblHoaDon.getValueAt(rowSelected, 0);
-//        float tongTien = tinhTongTien();
-//        int maTTkH = 0;
-//        String hinThucThanhToan = cboHinhThucThanhToan.toString();
-//        for (KhachHang kh : listkh) {
-//            if (kh.getSdt().equals(sdt)) {
-//                maTTkH = kh.getMaKH();
-//            }
-//        }
-//
-//        int choice = JOptionPane.showConfirmDialog(this, message, "Sneaker-Store", JOptionPane.YES_NO_OPTION);
-//        if (choice == 0) {
-//            if (loadVoucher() == null) {
-//                if (maTTkH == 0) {
-//                    banHangRepository.updateHoaDon2(maHD, ngayTao, trangThai, tongTien);
-//                    banHangRepository.insertThanhToan2(maHD, hinThucThanhToan);
-//                    fillDSHDCho();
-//                    clearForm();
-//                    return;
-//                }
-//                banHangRepository.updateHoaDon(maHD, ngayTao, trangThai, tongTien, maTTkH);
-//                banHangRepository.insertThanhToan(maHD, maTTkH, hinThucThanhToan);
-//                txtSDTKhach.setText("");
-//                lblTenKhach.setText("");
-//                fillDSHDCho();
-//                clearForm();
-//                return;
-//            } else {
-//                float giamGia = loadVoucher().getMucGiam();
-//                if (loadVoucher().getDonVi().equals("VNĐ")) {
-//                    giamGia = tinhTongTien() - giamGia;
-//                    if (giamGia <= 0) {
-//                        giamGia = 0;
-//                    }
-//                } else {
-//                    giamGia = tinhTongTien() * ((100 - giamGia) / 100);
-//                    if (giamGia <= 0) {
-//                        giamGia = 0;
-//                    }
-//                }
-//
-//                if (maTTkH == 0) {
-//                    banHangRepository.updateHoaDon2(maHD, ngayTao, trangThai, tongTien);
-//                    banHangRepository.insertThanhToan2(maHD, hinThucThanhToan);
-//                    banHangRepository.insertHDKM(maHD, loadVoucher().getMaKM(), giamGia);
-//                    fillDSHDCho();
-//                    clearForm();
-//                    return;
-//                }
-//                banHangRepository.updateHoaDon(maHD, ngayTao, trangThai, tongTien, maTTkH);
-//                banHangRepository.insertThanhToan(maHD, maTTkH, hinThucThanhToan);
-//                banHangRepository.insertHDKM(maHD, loadVoucher().getMaKM(), giamGia);
-//                txtSDTKhach.setText("");
-//                lblTenKhach.setText("");
-//                fillDSHDCho();
-//                clearForm();
-//
-//            }
-//        }
-//    }
-    
-    //Update hóa đơn (thanh toán)
     void updateHoaDon(boolean trangThai, String message) {
         ArrayList<KhachHang> listkh = banHangRepository.getKhachHang();
         if (tblGioHang.getRowCount() <= 0) {
@@ -659,25 +576,13 @@ public class JFrameBanHang extends javax.swing.JFrame {
         String sdt = txtSDTKhach.getText();
         String tienThua = lblTienThua.getText();
         if (tienThua.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Chưa đủ tiền thanh toán");
-            return;
-        }
-
-        // Check số tiền thanh toán
-        try {
-            float tienThuaFloat = Float.parseFloat(tienThua);
-            if (tienThuaFloat < 0) {
-                JOptionPane.showMessageDialog(this, "Chưa đủ tiền thanh toán");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Số tiền nhập vào không hợp lệ");
+             JOptionPane.showMessageDialog(this, "Chưa đủ tiền thanh toán");
             return;
         }
 
         int rowSelected = tblHoaDon.getSelectedRow();
         if (rowSelected < 0) {
-            JOptionPane.showMessageDialog(this, "Chưa chọn hóa đơn thao tác");
+             JOptionPane.showMessageDialog(this, "Chưa chọn hóa đơn thao tác");
             return;
         }
         int maHD = (int) tblHoaDon.getValueAt(rowSelected, 0);
@@ -736,9 +641,104 @@ public class JFrameBanHang extends javax.swing.JFrame {
                 lblTenKhach.setText("");
                 fillDSHDCho();
                 clearForm();
+
             }
         }
     }
+    
+//    //Update hóa đơn (thanh toán)
+//    void updateHoaDon(boolean trangThai, String message) {
+//        ArrayList<KhachHang> listkh = banHangRepository.getKhachHang();
+//        if (tblGioHang.getRowCount() <= 0) {
+//            JOptionPane.showMessageDialog(this, "Thanh toán thất bại: \n Hóa đơn trống");
+//            return;
+//        }
+//        LocalDateTime ldt = LocalDateTime.now();
+//        String dateNow = (DateTimeFormatter.ofPattern("MM-dd-yyyy", Locale.ENGLISH).format(ldt));
+//        String ngayTao = dateNow;
+//        String sdt = txtSDTKhach.getText();
+//        String tienThua = lblTienThua.getText();
+//        if (tienThua.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Chưa đủ tiền thanh toán");
+//            return;
+//        }
+//
+//        // Check số tiền thanh toán
+//        try {
+//            float tienThuaFloat = Float.parseFloat(tienThua);
+//            if (tienThuaFloat < 0) {
+//                JOptionPane.showMessageDialog(this, "Chưa đủ tiền thanh toán");
+//                return;
+//            }
+//        } catch (NumberFormatException e) {
+//            JOptionPane.showMessageDialog(this, "Số tiền nhập vào không hợp lệ");
+//            return;
+//        }
+//
+//        int rowSelected = tblHoaDon.getSelectedRow();
+//        if (rowSelected < 0) {
+//            JOptionPane.showMessageDialog(this, "Chưa chọn hóa đơn thao tác");
+//            return;
+//        }
+//        int maHD = (int) tblHoaDon.getValueAt(rowSelected, 0);
+//        float tongTien = tinhTongTien();
+//        int maTTkH = 0;
+//        String hinThucThanhToan = cboHinhThucThanhToan.toString();
+//        for (KhachHang kh : listkh) {
+//            if (kh.getSdt().equals(sdt)) {
+//                maTTkH = kh.getMaKH();
+//            }
+//        }
+//
+//        int choice = JOptionPane.showConfirmDialog(this, message, "Sneaker-Store", JOptionPane.YES_NO_OPTION);
+//        if (choice == 0) {
+//            if (loadVoucher() == null) {
+//                if (maTTkH == 0) {
+//                    banHangRepository.updateHoaDon2(maHD, ngayTao, trangThai, tongTien);
+//                    banHangRepository.insertThanhToan2(maHD, hinThucThanhToan);
+//                    fillDSHDCho();
+//                    clearForm();
+//                    return;
+//                }
+//                banHangRepository.updateHoaDon(maHD, ngayTao, trangThai, tongTien, maTTkH);
+//                banHangRepository.insertThanhToan(maHD, maTTkH, hinThucThanhToan);
+//                txtSDTKhach.setText("");
+//                lblTenKhach.setText("");
+//                fillDSHDCho();
+//                clearForm();
+//                return;
+//            } else {
+//                float giamGia = loadVoucher().getMucGiam();
+//                if (loadVoucher().getDonVi().equals("VNĐ")) {
+//                    giamGia = tinhTongTien() - giamGia;
+//                    if (giamGia <= 0) {
+//                        giamGia = 0;
+//                    }
+//                } else {
+//                    giamGia = tinhTongTien() * ((100 - giamGia) / 100);
+//                    if (giamGia <= 0) {
+//                        giamGia = 0;
+//                    }
+//                }
+//
+//                if (maTTkH == 0) {
+//                    banHangRepository.updateHoaDon2(maHD, ngayTao, trangThai, tongTien);
+//                    banHangRepository.insertThanhToan2(maHD, hinThucThanhToan);
+//                    banHangRepository.insertHDKM(maHD, loadVoucher().getMaKM(), giamGia);
+//                    fillDSHDCho();
+//                    clearForm();
+//                    return;
+//                }
+//                banHangRepository.updateHoaDon(maHD, ngayTao, trangThai, tongTien, maTTkH);
+//                banHangRepository.insertThanhToan(maHD, maTTkH, hinThucThanhToan);
+//                banHangRepository.insertHDKM(maHD, loadVoucher().getMaKM(), giamGia);
+//                txtSDTKhach.setText("");
+//                lblTenKhach.setText("");
+//                fillDSHDCho();
+//                clearForm();
+//            }
+//        }
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
