@@ -50,7 +50,7 @@ public class JFrameHoaDon extends javax.swing.JFrame {
                 int selectedRow = tblHoaDon.getSelectedRow();
                 if (selectedRow != -1) {
                     int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
-                    fillHoaDonChiTiet(maHD); 
+                    fillHoaDonChiTiet(maHD);
                 }
             }
         });

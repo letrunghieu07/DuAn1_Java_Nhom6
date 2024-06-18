@@ -645,6 +645,8 @@ public class JFrameBanHang extends javax.swing.JFrame {
 //            }
 //        }
 //    }
+    
+    //Update hóa đơn (thanh toán)
     void updateHoaDon(boolean trangThai, String message) {
         ArrayList<KhachHang> listkh = banHangRepository.getKhachHang();
         if (tblGioHang.getRowCount() <= 0) {
@@ -661,7 +663,7 @@ public class JFrameBanHang extends javax.swing.JFrame {
             return;
         }
 
-        // Check if the entered amount is sufficient
+        // Check số tiền thanh toán
         try {
             float tienThuaFloat = Float.parseFloat(tienThua);
             if (tienThuaFloat < 0) {
