@@ -546,8 +546,7 @@ public class JFrameKhacHang extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        int admin = Auth.isManager();
-        if (admin == 0) {
+       
             index = tblKhachHang.getSelectedRow();
 
             if (index == -1) {
@@ -566,9 +565,7 @@ public class JFrameKhacHang extends javax.swing.JFrame {
                 }
             }
 
-        } else {
-             JOptionPane.showMessageDialog(this, "Bạn không được phép xóa");
-        }
+        
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
