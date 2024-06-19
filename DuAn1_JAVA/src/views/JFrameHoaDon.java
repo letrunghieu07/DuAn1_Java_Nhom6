@@ -7,17 +7,27 @@ package views;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import model.HoaDonChiTietq;
 import model.hoaDon;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import repository.BanHangRepository;
 import repository.HoaDonRepository;
 
@@ -102,6 +112,48 @@ public class JFrameHoaDon extends javax.swing.JFrame {
             };
             modelTable2.addRow(rowData);
         }
+    }
+    
+     public void inHoaDon() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                XSSFWorkbook workbook = new XSSFWorkbook();
+                XSSFSheet sheet = workbook.createSheet("HoaDonChiTiet");
+                TableModel model = tblChiTietHoaDon.getModel();
+
+                XSSFRow headerRow = sheet.createRow(0);
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    headerRow.createCell(j).setCellValue(model.getColumnName(j));
+                }
+
+                // Data
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    XSSFRow dataRow = sheet.createRow(i + 1);
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        Object cellValue = model.getValueAt(i, j);
+                        if (cellValue != null) {
+                            dataRow.createCell(j).setCellValue(cellValue.toString());
+                        }
+                    }
+                }
+
+                try (FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath() + ".xlsx")) {
+                    workbook.write(outputStream);
+                    JOptionPane.showMessageDialog(this, "In thành công!");
+                }
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "File not found!");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error writing to the file!");
+            }
+        }
+
     }
 
     /**
@@ -265,6 +317,11 @@ public class JFrameHoaDon extends javax.swing.JFrame {
         });
 
         jButton5.setText("In hóa đơn");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -361,6 +418,11 @@ public class JFrameHoaDon extends javax.swing.JFrame {
             fillDSHDCho();
         }
     }//GEN-LAST:event_btnTimKiemActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        inHoaDon();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

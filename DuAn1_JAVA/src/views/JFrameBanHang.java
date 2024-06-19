@@ -40,6 +40,9 @@ public class JFrameBanHang extends javax.swing.JFrame {
         fillHTTT();
         fillDSHDCho();
         rdoChuaThanhToan.setSelected(true);
+
+        tinhtienThua();
+        
     }
 
     // Fill danh sách sản phẩm
