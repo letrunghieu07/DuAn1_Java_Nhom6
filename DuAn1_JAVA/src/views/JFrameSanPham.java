@@ -5,11 +5,17 @@
 package views;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import model.ChatLieuDeGiay1;
 import model.ChatLieuMatGiay1;
@@ -19,6 +25,9 @@ import model.GiamGia1;
 import model.MauSac1;
 import model.SanPham1;
 import model.Size1;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import repository.SanPhamRepository;
 import repository.ThuocTinhRepository;
 
@@ -169,6 +178,7 @@ public class JFrameSanPham extends javax.swing.JFrame {
         tblCTSP = new javax.swing.JTable();
         txtSearch1 = new javax.swing.JTextField();
         btnTimKiem1 = new javax.swing.JButton();
+        btnIndssp = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         btnLamMoiThuocTinh = new javax.swing.JButton();
@@ -760,6 +770,13 @@ public class JFrameSanPham extends javax.swing.JFrame {
             }
         });
 
+        btnIndssp.setText("In DS SP");
+        btnIndssp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIndsspActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -775,7 +792,10 @@ public class JFrameSanPham extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnTimKiem1)))
+                        .addComponent(btnTimKiem1))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(btnIndssp)))
                 .addContainerGap(26, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
@@ -785,18 +805,21 @@ public class JFrameSanPham extends javax.swing.JFrame {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnTimKiem1))
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnIndssp)
+                        .addGap(6, 6, 6)))
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -1432,6 +1455,10 @@ public class JFrameSanPham extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnTimKiem1ActionPerformed
 
+    private void btnIndsspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndsspActionPerformed
+        inSPCT();
+    }//GEN-LAST:event_btnIndsspActionPerformed
+
     //---------------------FIll-----------------------------------------------//
     private void fillSize(List<Size1> list) {
         mol = (DefaultTableModel) tblThuocTinh.getModel();
@@ -1787,6 +1814,49 @@ public class JFrameSanPham extends javax.swing.JFrame {
         return true;
     }
 
+    // In sản phẩm
+    public void inSPCT() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                XSSFWorkbook workbook = new XSSFWorkbook();
+                XSSFSheet sheet = workbook.createSheet("SanPhamChiTiet");
+                TableModel model = tblCTSP.getModel();
+
+                XSSFRow headerRow = sheet.createRow(0);
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    headerRow.createCell(j).setCellValue(model.getColumnName(j));
+                }
+
+                // Data
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    XSSFRow dataRow = sheet.createRow(i + 1);
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        Object cellValue = model.getValueAt(i, j);
+                        if (cellValue != null) {
+                            dataRow.createCell(j).setCellValue(cellValue.toString());
+                        }
+                    }
+                }
+
+                try (FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath() + ".xlsx")) {
+                    workbook.write(outputStream);
+                    JOptionPane.showMessageDialog(this, "In thành công!");
+                }
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "File not found!");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error writing to the file!");
+            }
+        }
+
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -1826,6 +1896,7 @@ public class JFrameSanPham extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnIndssp;
     private javax.swing.JButton btnLamMoiCTSP;
     private javax.swing.JButton btnLamMoiThuocTinh;
     private javax.swing.JButton btnSanPham;

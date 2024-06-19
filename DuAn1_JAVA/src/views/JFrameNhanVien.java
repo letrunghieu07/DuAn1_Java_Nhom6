@@ -332,6 +332,8 @@ public class JFrameNhanVien extends javax.swing.JFrame {
         }
 
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -369,6 +371,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
         btnUpdateNhanVien4 = new javax.swing.JButton();
         btnXoaNhanVien2 = new javax.swing.JButton();
         btnClearForm2 = new javax.swing.JButton();
+        btnClearForm3 = new javax.swing.JButton();
         txtMaNV = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtTenDangNhap = new javax.swing.JTextField();
@@ -532,6 +535,15 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             }
         });
 
+        btnClearForm3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnClearForm3.setText("In DS NV");
+        btnClearForm3.setBorder(new javax.swing.border.MatteBorder(null));
+        btnClearForm3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearForm3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpnCRUD4Layout = new javax.swing.GroupLayout(jpnCRUD4);
         jpnCRUD4.setLayout(jpnCRUD4Layout);
         jpnCRUD4Layout.setHorizontalGroup(
@@ -539,6 +551,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             .addGroup(jpnCRUD4Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jpnCRUD4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnClearForm3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClearForm2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnXoaNhanVien2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdateNhanVien4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -551,10 +564,12 @@ public class JFrameNhanVien extends javax.swing.JFrame {
                 .addComponent(btnThemNhanVien2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnUpdateNhanVien4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addComponent(btnXoaNhanVien2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(btnXoaNhanVien2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnClearForm2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(btnClearForm3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -796,6 +811,10 @@ public class JFrameNhanVien extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
+    private void btnClearForm3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearForm3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClearForm3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -844,6 +863,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClearForm2;
+    private javax.swing.JButton btnClearForm3;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnQLNhanVien;
     private javax.swing.JButton btnThemNhanVien2;
