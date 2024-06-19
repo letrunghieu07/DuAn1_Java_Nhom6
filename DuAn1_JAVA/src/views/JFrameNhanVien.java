@@ -351,7 +351,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
             File file = chooser.getSelectedFile();
             try {
                 XSSFWorkbook workbook = new XSSFWorkbook();
-                XSSFSheet sheet = workbook.createSheet("SanPhamChiTiet");
+                XSSFSheet sheet = workbook.createSheet("Nhanvien");
                 TableModel model = tblNhanVien.getModel();
 
                 XSSFRow headerRow = sheet.createRow(0);

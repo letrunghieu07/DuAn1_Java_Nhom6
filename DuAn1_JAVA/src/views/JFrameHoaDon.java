@@ -115,46 +115,51 @@ public class JFrameHoaDon extends javax.swing.JFrame {
     }
     
      public void inHoaDon() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        int result = chooser.showSaveDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            try {
-                XSSFWorkbook workbook = new XSSFWorkbook();
-                XSSFSheet sheet = workbook.createSheet("HoaDonChiTiet");
-                TableModel model = tblChiTietHoaDon.getModel();
+    // Mở hộp thoại chọn tệp tin để lưu file Excel
+    JFileChooser chooser = new JFileChooser();
+    chooser.setCurrentDirectory(new File(System.getProperty("user.home"))); // Đặt thư mục hiện tại là thư mục người dùng
+    int result = chooser.showSaveDialog(null); // Hiển thị hộp thoại lưu file
+    if (result == JFileChooser.APPROVE_OPTION) { // Kiểm tra nếu người dùng chọn lưu file
+        File file = chooser.getSelectedFile(); // Lấy tệp tin được chọn
+        try {
+            // Tạo một workbook mới (tương ứng với một file Excel)
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            // Tạo một sheet mới trong workbook
+            XSSFSheet sheet = workbook.createSheet("HoaDonChiTiet");
+            // Lấy model của bảng (dữ liệu của bảng)
+            TableModel model = tblChiTietHoaDon.getModel();
 
-                XSSFRow headerRow = sheet.createRow(0);
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    headerRow.createCell(j).setCellValue(model.getColumnName(j));
-                }
+            // Tạo hàng đầu tiên (tiêu đề) trong sheet
+            XSSFRow headerRow = sheet.createRow(0);
+            for (int j = 0; j < model.getColumnCount(); j++) { // Duyệt qua các cột của bảng
+                headerRow.createCell(j).setCellValue(model.getColumnName(j)); // Thiết lập giá trị tiêu đề cho từng cột
+            }
 
-                // Data
-                for (int i = 0; i < model.getRowCount(); i++) {
-                    XSSFRow dataRow = sheet.createRow(i + 1);
-                    for (int j = 0; j < model.getColumnCount(); j++) {
-                        Object cellValue = model.getValueAt(i, j);
-                        if (cellValue != null) {
-                            dataRow.createCell(j).setCellValue(cellValue.toString());
-                        }
+            // Tạo dữ liệu cho các hàng tiếp theo
+            for (int i = 0; i < model.getRowCount(); i++) { // Duyệt qua các hàng của bảng
+                XSSFRow dataRow = sheet.createRow(i + 1); // Tạo hàng mới trong sheet
+                for (int j = 0; j < model.getColumnCount(); j++) { // Duyệt qua các cột của hàng
+                    Object cellValue = model.getValueAt(i, j); // Lấy giá trị của ô
+                    if (cellValue != null) { // Kiểm tra nếu ô có giá trị
+                        dataRow.createCell(j).setCellValue(cellValue.toString()); // Thiết lập giá trị cho ô
                     }
                 }
-
-                try (FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath() + ".xlsx")) {
-                    workbook.write(outputStream);
-                    JOptionPane.showMessageDialog(this, "In thành công!");
-                }
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "File not found!");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error writing to the file!");
             }
-        }
 
+            // Ghi workbook vào file
+            try (FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath() + ".xlsx")) {
+                workbook.write(outputStream); // Ghi dữ liệu từ workbook vào outputStream
+                JOptionPane.showMessageDialog(null, "In thành công!"); // Hiển thị thông báo thành công
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(); // In ra lỗi nếu file không được tìm thấy
+            JOptionPane.showMessageDialog(null, "File not found!"); // Hiển thị thông báo lỗi
+        } catch (IOException ex) {
+            ex.printStackTrace(); // In ra lỗi nếu có lỗi trong quá trình ghi file
+            JOptionPane.showMessageDialog(null, "Error writing to the file!"); // Hiển thị thông báo lỗi
+        }
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.

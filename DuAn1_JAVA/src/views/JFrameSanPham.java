@@ -1823,7 +1823,7 @@ public class JFrameSanPham extends javax.swing.JFrame {
             File file = chooser.getSelectedFile();
             try {
                 XSSFWorkbook workbook = new XSSFWorkbook();
-                XSSFSheet sheet = workbook.createSheet("SanPhamChiTiet");
+                XSSFSheet sheet = workbook.createSheet("NhanVien");
                 TableModel model = tblCTSP.getModel();
 
                 XSSFRow headerRow = sheet.createRow(0);
