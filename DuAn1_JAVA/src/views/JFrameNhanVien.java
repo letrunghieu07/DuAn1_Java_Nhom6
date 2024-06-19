@@ -5,16 +5,25 @@
 package views;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import model.NhanVien;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import repository.NhanVienRepository;
 
 /**
@@ -333,7 +342,48 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 
     }
     
-    
+     // In sản phẩm
+    public void inNhanVien() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                XSSFWorkbook workbook = new XSSFWorkbook();
+                XSSFSheet sheet = workbook.createSheet("SanPhamChiTiet");
+                TableModel model = tblNhanVien.getModel();
+
+                XSSFRow headerRow = sheet.createRow(0);
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    headerRow.createCell(j).setCellValue(model.getColumnName(j));
+                }
+
+                // Data
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    XSSFRow dataRow = sheet.createRow(i + 1);
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        Object cellValue = model.getValueAt(i, j);
+                        if (cellValue != null) {
+                            dataRow.createCell(j).setCellValue(cellValue.toString());
+                        }
+                    }
+                }
+
+                try (FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath() + ".xlsx")) {
+                    workbook.write(outputStream);
+                    JOptionPane.showMessageDialog(this, "In thành công!");
+                }
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "File not found!");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error writing to the file!");
+            }
+        }
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -813,6 +863,7 @@ public class JFrameNhanVien extends javax.swing.JFrame {
 
     private void btnClearForm3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearForm3ActionPerformed
         // TODO add your handling code here:
+        inNhanVien();
     }//GEN-LAST:event_btnClearForm3ActionPerformed
 
     /**
