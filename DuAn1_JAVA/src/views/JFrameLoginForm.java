@@ -27,6 +27,7 @@ public class JFrameLoginForm extends javax.swing.JFrame {
     public JFrameLoginForm() throws SQLServerException {
         initComponents();
         setLocationRelativeTo(null);
+        
         this.nhanVienRepository = new NhanVienRepository();
     }
 
@@ -48,6 +49,9 @@ public class JFrameLoginForm extends javax.swing.JFrame {
             this.dispose();
         }
     }
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
